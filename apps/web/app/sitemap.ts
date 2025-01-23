@@ -1,7 +1,7 @@
 import { POSTS_QUERY } from "@common/queries/blog.queries";
 import { Post } from "@common/types/post.types";
 import { MetadataRoute } from "next";
-import { client } from "./sanity/lib/client";
+import { client } from "../sanity/lib/client";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     let site: MetadataRoute.Sitemap = [
