@@ -5,8 +5,7 @@
   "scripts": {
     "dev": "next dev --turbo --port 3001",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "start": "next start"
   },
   "dependencies": {
     "@repo/ui": "workspace:*",
@@ -15,13 +14,10 @@
     "react-dom": "18.3.1"
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.6",
     "typescript": "^5"
   }
 }
