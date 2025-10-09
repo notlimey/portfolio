@@ -1,24 +1,24 @@
-import { defineField, defineType } from 'sanity'
+import { defineField, defineType } from "sanity";
 
 export const categoryType = defineType({
-  name: 'category',
-  title: 'Category',
-  type: 'document',
+  name: "category",
+  title: "Category",
+  type: "document",
   fields: [
     defineField({
-      name: 'title',
-      type: 'string',
+      name: "title",
+      type: "string",
     }),
     defineField({
-      name: 'slug',
-      type: 'slug',
+      name: "slug",
+      type: "slug",
       options: {
-        source: 'title',
+        source: "title",
       },
     }),
     defineField({
-      name: 'description',
-      type: 'text',
+      name: "description",
+      type: "text",
     }),
   ],
-})
+});
