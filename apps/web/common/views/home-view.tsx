@@ -29,7 +29,7 @@ export default function HomeView({ homepage }: { homepage: Homepage }) {
               </div>
             </div>
             <Image
-              src={urlFor(homepage.hero.image).width(1240).height(900).url()}
+              src={urlFor(homepage.hero.image).width(1240).height(900).quality(70).url()}
               width="550"
               height="400"
               alt="Hero"
