@@ -4,6 +4,7 @@ import "./globals.scss";
 import { ThemeProvider } from "@common/providers/theme-provider";
 import { GlobalSchema } from "@common/structured-data/global";
 import { Toaster } from "@components/ui/sonner";
+import { BASE_URL } from "../configuration";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -15,7 +16,6 @@ const geistMono = localFont({
 });
 
 const AUTHORITATIVE_NAME = "Martin Kulvedrøsten Myhre";
-const BASE_URL = "https://mkmyhre.com";
 
 export default function RootLayout({
   children,

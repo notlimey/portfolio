@@ -7,6 +7,7 @@ import { notFound } from "next/navigation";
 import { toPlainText } from "next-sanity";
 import { client } from "../../../sanity/lib/client";
 import { urlFor } from "../../../sanity/lib/image";
+import { BASE_URL } from "../../../configuration";
 
 export const generateMetadata = async ({
   params,
@@ -31,7 +32,7 @@ export const generateMetadata = async ({
       images: post.mainImage ? [urlFor(post.mainImage).url()] : [],
     },
     alternates: {
-      canonical: post.canonicalUrl,
+      canonical: post.canonicalUrl || `${BASE_URL}/posts/${post.slug}`,
     },
   } satisfies Metadata;
 };

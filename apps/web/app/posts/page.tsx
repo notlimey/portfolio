@@ -5,12 +5,13 @@ import { ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { client } from "../../sanity/lib/client";
+import { BASE_URL } from "../../configuration";
 
 export const metadata: Metadata = {
     title: "Posts",
     description: "Posts",
     alternates: {
-        canonical: "https://mkmyhre.com/posts"
+        canonical: `${BASE_URL}/posts`
     }
 };
 
