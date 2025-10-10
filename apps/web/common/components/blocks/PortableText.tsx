@@ -1,24 +1,12 @@
-import type { CodeBlock as CodeBlockType } from "@common/types/blocks.types";
-import type { SanityBlockContent } from "@common/types/root.types";
-import { PortableText as NativePortableText } from "@portabletext/react";
-import CodeBlock from "./CodeBlock";
+import { useEditor, EditorContent } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
 
-export default function PortableText({ value }: { value: SanityBlockContent }) {
-  return (
-    <NativePortableText
-      value={value}
-      components={{
-        types: {
-          code: ({ value }: { value: CodeBlockType }) => {
-            return <CodeBlock {...value} />;
-          },
-        },
-        marks: {
-          code: ({ children }: { children: React.ReactNode }) => {
-            return <code className="code-tag">{children}</code>;
-          },
-        },
-      }}
-    />
-  );
+export default function PortableText({ value }: { value: string }) {
+  const editor = useEditor({
+    editable: false,
+    content: value ? JSON.parse(value) : "",
+    extensions: [StarterKit],
+  });
+
+  return <EditorContent editor={editor} />;
 }
