@@ -18,7 +18,7 @@ export default async function PostsPage() {
     const posts: Post[] = await client.fetch(POSTS_QUERY);
 
     return (
-        <div className="mx-auto max-w-[1240px] py-12 lg:py-24 flex flex-col gap-5 ">
+        <div className="mx-auto max-w-[1240px] py-12 lg:py-24 flex flex-col gap-5 px-5">
             <div>
                 <Link href={"/"} className="flex items-center gap-2">
                     <ArrowLeft/>
