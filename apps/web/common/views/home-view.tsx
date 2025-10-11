@@ -9,16 +9,16 @@ import { urlFor } from '../../sanity/lib/image';
 
 export default function HomeView({ homepage }: { homepage: Homepage }) {
 	return (
-		<div className="mx-auto max-w-[1240px] py-12 lg:py-24 flex flex-col gap-12 ">
+		<div className="mx-auto flex max-w-[1240px] flex-col gap-12 py-12 lg:py-24">
 			<section className="w-full">
 				<div className="container mx-auto px-4 md:px-6">
 					<div className="grid items-center gap-6 lg:grid-cols-[1fr_500px] lg:gap-12 xl:grid-cols-[1fr_550px]">
 						<div className="flex flex-col justify-center space-y-4">
 							<div className="space-y-2">
-								<h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
+								<h1 className="font-bold text-4xl tracking-tighter sm:text-5xl md:text-6xl">
 									{homepage.hero.title}
 								</h1>
-								<div className="flex gap-2 pb-4 pt-2">
+								<div className="flex gap-2 pt-2 pb-4">
 									<Badge>Software Developer</Badge>
 									<Badge>CEO</Badge>
 									<Badge>Entrepreneur</Badge>
@@ -45,7 +45,7 @@ export default function HomeView({ homepage }: { homepage: Homepage }) {
 			<section className="w-full">
 				<div className="container mx-auto px-4 md:px-6">
 					<div className="space-y-4">
-						<h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+						<h2 className="font-bold text-3xl tracking-tighter sm:text-4xl md:text-5xl">
 							{homepage.latestPostsTitle}
 						</h2>
 						<div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
@@ -63,7 +63,7 @@ export default function HomeView({ homepage }: { homepage: Homepage }) {
 			<section className="w-ful">
 				<div className="container mx-auto px-4 md:px-6">
 					<div className="space-y-4">
-						<h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+						<h2 className="font-bold text-3xl tracking-tighter sm:text-4xl md:text-5xl">
 							Other Websites to Visit
 						</h2>
 						<div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">

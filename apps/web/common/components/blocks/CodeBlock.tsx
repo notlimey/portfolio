@@ -24,8 +24,8 @@ const CodeBlock = (props: CodeBlockType) => {
 	};
 
 	return (
-		<div className="bg-secondary rounded-lg border overflow-x-scroll relative mt-6">
-			<div className="px-4 py-2 bg-secondary-foreground text-secondary flex justify-between">
+		<div className="relative mt-6 overflow-x-scroll rounded-lg border bg-secondary">
+			<div className="flex justify-between bg-secondary-foreground px-4 py-2 text-secondary">
 				<p className="uppercase">{props.language}</p>
 				<button
 					type="button"

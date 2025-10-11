@@ -15,16 +15,16 @@ import {
 export default function PostCard({ post }: { post: Post }) {
 	return (
 		<Link href={`/posts/${post.slug}`} key={post._id} className="h-full">
-			<Card className="h-full flex-col flex">
+			<Card className="flex h-full flex-col">
 				<CardHeader>
 					<CardTitle className="line-clamp-2">{post.title}</CardTitle>
 				</CardHeader>
 				<CardContent className="flex-grow">
-					<p className="text-muted-foreground line-clamp-4">
+					<p className="line-clamp-4 text-muted-foreground">
 						{toPlainText(post.body ?? []).slice(0, 250)}
 					</p>
 				</CardContent>
-				<CardFooter className="border-t !py-2 flex items-center">
+				<CardFooter className="!py-2 flex items-center border-t">
 					<div className="flex items-center gap-2">
 						<Avatar className="size-8">
 							<AvatarImage
@@ -45,11 +45,11 @@ export default function PostCard({ post }: { post: Post }) {
 							</AvatarFallback>
 						</Avatar>
 						<div>
-							<p className="text-sm font-medium">
+							<p className="font-medium text-sm">
 								{post?.author?.name}
 							</p>
 							<p
-								className="text-sm text-muted-foreground inline-flex items-center gap-1"
+								className="inline-flex items-center gap-1 text-muted-foreground text-sm"
 								suppressHydrationWarning
 							>
 								{post.publishedAt ? (

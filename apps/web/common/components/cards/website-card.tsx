@@ -15,14 +15,14 @@ export default function PostCard({
 }) {
 	return (
 		<a href={website.url} key={website.url} className="h-full">
-			<Card className="h-full flex-col flex">
+			<Card className="flex h-full flex-col">
 				<CardHeader>
 					<CardTitle className="line-clamp-2">
 						{website.name}
 					</CardTitle>
 				</CardHeader>
 				<CardContent className="flex-grow">
-					<p className="text-muted-foreground line-clamp-4">
+					<p className="line-clamp-4 text-muted-foreground">
 						{website.description}
 					</p>
 				</CardContent>

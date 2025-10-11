@@ -19,17 +19,17 @@ export default async function PostsPage() {
 	const posts: Post[] = await client.fetch(POSTS_QUERY);
 
 	return (
-		<div className="mx-auto max-w-[1240px] py-12 lg:py-24 flex flex-col gap-5 px-5">
+		<div className="mx-auto flex max-w-[1240px] flex-col gap-5 px-5 py-12 lg:py-24">
 			<div>
 				<Link href={'/'} className="flex items-center gap-2">
 					<ArrowLeft />
 					Home
 				</Link>
 			</div>
-			<h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
+			<h1 className="font-bold text-4xl tracking-tighter sm:text-5xl md:text-6xl">
 				Posts
 			</h1>
-			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+			<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 				{posts.map((post: Post) => (
 					<PostCard key={post._id} post={post} />
 				))}

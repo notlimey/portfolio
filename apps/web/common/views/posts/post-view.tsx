@@ -16,18 +16,18 @@ export default function PostView({
 	publishedAt,
 }: Post) {
 	return (
-		<div className="flex flex-col gap-5 max-w-[880px] mx-auto px-8 py-10">
+		<div className="mx-auto flex max-w-[880px] flex-col gap-5 px-8 py-10">
 			<div>
 				<Link href={'/'} className="flex items-center gap-2">
 					<ArrowLeft />
 					Home
 				</Link>
 			</div>
-			<h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+			<h1 className="scroll-m-20 font-extrabold text-4xl tracking-tight lg:text-5xl">
 				{title}
 			</h1>
 			<div className="flex flex-col gap-2">
-				<div className="flex items-center gap-2 mb-3">
+				<div className="mb-3 flex items-center gap-2">
 					<Avatar className="size-12">
 						<AvatarImage
 							src={
@@ -46,9 +46,9 @@ export default function PostView({
 						</AvatarFallback>
 					</Avatar>
 					<div>
-						<p className="text-sm font-medium">{author?.name}</p>
+						<p className="font-medium text-sm">{author?.name}</p>
 						<p
-							className="text-sm text-muted-foreground inline-flex items-center gap-1"
+							className="inline-flex items-center gap-1 text-muted-foreground text-sm"
 							suppressHydrationWarning
 						>
 							{publishedAt ? (
@@ -75,7 +75,7 @@ export default function PostView({
 					</div>
 				</div>
 
-				<div className="flex gap-2 flex-wrap">
+				<div className="flex flex-wrap gap-2">
 					{categories?.map((x) => (
 						<Badge key={x.slug}>{x.title}</Badge>
 					))}
