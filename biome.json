@@ -1,19 +1,81 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.2.5/schema.json",
-  "linter": {
-    "enabled": true,
-    "rules": {
-      "recommended": true
-    }
-  },
-  "formatter": {
-    "enabled": true,
-    "indentStyle": "space",
-    "indentWidth": 2
-  },
-  "javascript": {
-    "formatter": {
-      "quoteStyle": "double"
-    }
-  }
+	"$schema": "https://biomejs.dev/schemas/2.2.4/schema.json",
+	"formatter": {
+		"enabled": true,
+		"formatWithErrors": false,
+		"indentStyle": "tab",
+		"indentWidth": 4,
+		"lineWidth": 80,
+		"lineEnding": "lf"
+	},
+	"files": {
+		"includes": [
+			"**",
+			"!**/node_modules",
+			"!**/.next",
+			"!**/dist",
+			"!**/build",
+			"!**/.turbo",
+			"!**/.million",
+			"!**/.idea",
+			"!**/.vscode",
+			"!**/.husky"
+		]
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true,
+			"style": {
+				"useConst": "error"
+			},
+			"suspicious": {
+				"noExtraNonNullAssertion": "error",
+				"noUnknownAtRules": "off",
+				"noExplicitAny": "error"
+			},
+			"correctness": {
+				"useExhaustiveDependencies": "error"
+			},
+			"a11y": {
+				"recommended": true
+			},
+			"nursery": {
+				"noNextAsyncClientComponent": "error",
+				"useSortedClasses": "error"
+			},
+			"security": {
+				"noBlankTarget": "error"
+			}
+		}
+	},
+	"json": {
+		"formatter": {
+			"enabled": true
+		}
+	},
+	"javascript": {
+		"formatter": {
+			"indentStyle": "tab",
+			"indentWidth": 4,
+			"trailingCommas": "all",
+			"quoteStyle": "single",
+			"semicolons": "always",
+			"arrowParentheses": "always",
+			"jsxQuoteStyle": "double"
+		}
+	},
+	"assist": {
+		"enabled": false,
+		"actions": {
+			"source": {
+				"organizeImports": "on"
+			}
+		}
+	},
+	"css": {
+		"formatter": {
+			"enabled": true
+		}
+	}
 }
