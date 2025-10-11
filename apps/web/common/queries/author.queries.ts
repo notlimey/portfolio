@@ -1,4 +1,4 @@
-import { groq } from "next-sanity";
+import { groq } from 'next-sanity';
 
 export const AUTHOR_QUERY_RAW = groq`{
     name,

@@ -1,5 +1,5 @@
-import { groq } from "next-sanity";
-import { POST_QUERY_RAW } from "./blog.queries";
+import { groq } from 'next-sanity';
+import { POST_QUERY_RAW } from './blog.queries';
 
 export const HOMEPAGE_QUERY = groq`*[_type == "homePage"][0]{
   ...,

@@ -1,20 +1,22 @@
 {
-  "name": "notlimey.com",
-  "private": true,
-  "scripts": {
-    "build": "turbo build",
-    "dev": "turbo dev",
-    "lint": "pnpm biome lint .",
-    "format": "pnpm biome format --write ."
-  },
-  "devDependencies": {
-    "@biomejs/biome": "^2.2.5",
-    "turbo": "^2.1.1",
-    "typescript": "^5.4.5",
-    "wait-on": "^7.2.0"
-  },
-  "packageManager": "pnpm@8.15.6",
-  "engines": {
-    "node": ">=18"
-  }
+	"name": "notlimey.com",
+	"private": true,
+	"scripts": {
+		"build": "turbo build",
+		"dev": "turbo dev",
+		"prepare": "husky",
+		"lint": "biome ci --files-ignore-unknown=true",
+		"fix": "biome check --write --no-errors-on-unmatched --files-ignore-unknown=true",
+		"fix-unsafe": "biome check --write --no-errors-on-unmatched --files-ignore-unknown=true --unsafe --max-diagnostics 1000"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.2.5",
+		"turbo": "^2.1.1",
+		"typescript": "^5.4.5",
+		"wait-on": "^7.2.0"
+	},
+	"packageManager": "pnpm@8.15.6",
+	"engines": {
+		"node": ">=18"
+	}
 }

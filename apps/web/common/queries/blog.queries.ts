@@ -1,5 +1,5 @@
-import { groq } from "next-sanity";
-import { AUTHOR_QUERY_RAW } from "./author.queries";
+import { groq } from 'next-sanity';
+import { AUTHOR_QUERY_RAW } from './author.queries';
 
 export const POST_QUERY_RAW = groq`{
     ...,
