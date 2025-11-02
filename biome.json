@@ -41,8 +41,7 @@
 				"recommended": true
 			},
 			"nursery": {
-				"noNextAsyncClientComponent": "error",
-				"useSortedClasses": "error"
+				"noNextAsyncClientComponent": "error"
 			},
 			"security": {
 				"noBlankTarget": "error"
