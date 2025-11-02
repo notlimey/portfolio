@@ -25,17 +25,14 @@ export const ChainedTypewriter = ({
 	onComplete,
 	enabled = true,
 }: ChainedTypewriterProps) => {
-	const delays = useMemo(
-		() =>
-			items.map((_item, index) => {
-				if (index === 0) return initialDelay;
-				const prev = items
-					.slice(0, index)
-					.reduce((acc, curr) => acc + curr.text.length, 0);
-				return prev * typingSpeed + initialDelay;
-			}),
-		[items, initialDelay, typingSpeed],
-	);
+	const delays = useMemo(() => {
+		let accumulatedChars = 0;
+		return items.map((item) => {
+			const delayForItem = initialDelay + accumulatedChars * typingSpeed;
+			accumulatedChars += item.text.length;
+			return delayForItem;
+		});
+	}, [items, initialDelay, typingSpeed]);
 
 	return (
 		<span className={wrapperClassName}>

@@ -1,77 +1,15 @@
 'use client';
 import { Button } from '@common/components/ui/button';
-import { animated, useSpring } from '@react-spring/web';
+import { animated } from '@react-spring/web';
 import { Code2, Github, Terminal } from 'lucide-react';
-import { useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ChainedTypewriter } from '../../shared/components/chained-typewriter';
-import {
-	calculateTimeToFinish,
-	ListWithTypewriter,
-} from '../../shared/components/list-with-typewriter';
+import { ListWithTypewriter } from '../../shared/components/list-with-typewriter';
 import { Typewriter } from '../../shared/components/typewriter';
-import { sleep } from '@common/lib/utils';
-
-const whoami = [
-	{
-		label: 'name',
-		value: 'Martin Kulvedrøsten Myhre',
-	},
-	{
-		label: 'role',
-		value: 'Full-Stack Developer & Entrepreneur',
-	},
-	{
-		label: 'location',
-		value: 'Hamar, Norway 🇳🇴',
-	},
-	{
-		label: 'current',
-		value: 'Junior Consultant @ Crayon (prev. Inmeta)',
-	},
-	{
-		label: 'stack',
-		value: '[TypeScript, .NET, Next.js, React, Systems]',
-	},
-	{
-		label: 'ventures',
-		value: '3Steps AS, Limeyfy AS',
-	},
-];
-
-const whoamiWithLength = whoami.map((item) => ({
-	label: item.label,
-	value: item.value,
-	len: item.value.length + item.label.length + 2,
-}));
-const WHOAMI_TIME_BETWEEN_ROWS = 50;
-const WHOAMI_TYPING_SPEED = 5;
-
-const animationConfig = {
-	initial: 500, // delay in milliseconds
-	delayAfterInitial: 200,
-	text: 100, // speed in milliseconds
-	whoamiItem: 50,
-	delayBeforeProjects: 500,
-	projects: 100,
-	delayAfterProjects: 200,
-};
-
-const START_INFORMATION_DELAY =
-	animationConfig.initial +
-	animationConfig.delayAfterInitial +
-	animationConfig.whoamiItem * 6;
+import { WhoamiListItem } from './hero/whoami-list-item';
+import { ANIMATION_CONFIG, WHOAMI_WITH_LENGTH } from './hero/config';
 
 export const Hero = () => {
-	const timeToFinishInformation = calculateTimeToFinish(
-		whoamiWithLength,
-		WHOAMI_TYPING_SPEED,
-		START_INFORMATION_DELAY,
-		WHOAMI_TIME_BETWEEN_ROWS,
-	);
-
-	const timeUntilProjects =
-		timeToFinishInformation + animationConfig.delayBeforeProjects;
-
 	const [visible, setVisible] = useState({
 		information: false,
 		projects: false,
@@ -79,21 +17,78 @@ export const Hero = () => {
 		search: false,
 	});
 
-	const toggleVisible = (key: keyof typeof visible) => {
-		setVisible((prev) => ({
-			...prev,
-			[key]: true,
-		}));
-	};
+	const projectsListTimeoutRef = useRef<number | null>(null);
+	const searchTimeoutRef = useRef<number | null>(null);
 
-	const toggleProjectsList = () => {
-		const timeout = setTimeout(async () => {
+	const toggleVisible = useCallback((key: keyof typeof visible) => {
+		setVisible((prev) => {
+			if (prev[key]) return prev;
+			return {
+				...prev,
+				[key]: true,
+			};
+		});
+	}, []);
+
+	const whoamiItems = useMemo(
+		() =>
+			WHOAMI_WITH_LENGTH.map((item, index) => {
+				const isLastItem = index === WHOAMI_WITH_LENGTH.length - 1;
+				return {
+					key: item.label,
+					len: item.len,
+					node: (delay: number) => (
+						<WhoamiListItem
+							item={item}
+							visible={visible.information}
+							toggleVisible={() => toggleVisible('projects')}
+							delay={delay}
+							typingSpeed={ANIMATION_CONFIG.typingSpeed}
+							isLastItem={isLastItem}
+						/>
+					),
+				};
+			}),
+		[toggleVisible, visible.information],
+	);
+
+	const handleProjectsCommandComplete = useCallback(() => {
+		if (projectsListTimeoutRef.current) {
+			window.clearTimeout(projectsListTimeoutRef.current);
+		}
+
+		projectsListTimeoutRef.current = window.setTimeout(() => {
 			toggleVisible('projectsList');
-			await sleep(500);
+			projectsListTimeoutRef.current = null;
+		}, ANIMATION_CONFIG.afterCommandsDelay);
+	}, [toggleVisible]);
+
+	useEffect(() => {
+		if (!visible.projectsList || visible.search) return;
+
+		if (searchTimeoutRef.current) {
+			window.clearTimeout(searchTimeoutRef.current);
+		}
+
+		searchTimeoutRef.current = window.setTimeout(() => {
 			toggleVisible('search');
-		}, 500);
-		return () => clearTimeout(timeout);
-	};
+			searchTimeoutRef.current = null;
+		}, ANIMATION_CONFIG.afterCommandsDelay);
+	}, [visible.projectsList, visible.search, toggleVisible]);
+
+	useEffect(
+		() => () => {
+			if (projectsListTimeoutRef.current) {
+				window.clearTimeout(projectsListTimeoutRef.current);
+				projectsListTimeoutRef.current = null;
+			}
+			if (searchTimeoutRef.current) {
+				window.clearTimeout(searchTimeoutRef.current);
+				searchTimeoutRef.current = null;
+			}
+		},
+		[],
+	);
 
 	return (
 		<section className="relative min-h-screen flex items-center justify-center bg-slate-950 overflow-hidden">
@@ -122,8 +117,12 @@ export const Hero = () => {
 								<span>martin@portfolio:~$</span>
 								<Typewriter
 									text="whoami"
-									delay={animationConfig.initial}
-									typingSpeed={WHOAMI_TYPING_SPEED * 3}
+									delay={
+										ANIMATION_CONFIG.betweenCommandsDelay
+									}
+									typingSpeed={
+										ANIMATION_CONFIG.typingSpeedCommand
+									}
 									onComplete={() =>
 										toggleVisible('information')
 									}
@@ -132,55 +131,11 @@ export const Hero = () => {
 
 							<div className="space-y-2 text-slate-300">
 								<ListWithTypewriter
-									items={whoamiWithLength.map(
-										(item, index) => ({
-											node: (delay: number) => (
-												<div
-													key={item.label}
-													className="flex gap-4"
-												>
-													<ChainedTypewriter
-														enabled={
-															visible.information
-														}
-														items={[
-															{
-																text: `${item.label}:`,
-																key: `${item.label}-label`,
-																className:
-																	'text-blue-400 mr-2',
-															},
-															{
-																text: item.value,
-																key: `${item.label}-value`,
-																className:
-																	'text-white',
-															},
-														]}
-														initialDelay={
-															delay + 100
-														}
-														typingSpeed={
-															WHOAMI_TYPING_SPEED
-														}
-														onComplete={() =>
-															index ===
-															whoamiWithLength.length -
-																1
-																? toggleVisible(
-																		'projects',
-																	)
-																: undefined
-														}
-													/>
-												</div>
-											),
-											key: item.label,
-											len: item.len,
-										}),
-									)}
-									betweenItemsDelay={WHOAMI_TIME_BETWEEN_ROWS}
-									typingSpeed={WHOAMI_TYPING_SPEED}
+									items={whoamiItems}
+									betweenItemsDelay={
+										ANIMATION_CONFIG.timeBetweenRows
+									}
+									typingSpeed={ANIMATION_CONFIG.typingSpeed}
 									className="flex gap-1 flex-col"
 								/>
 							</div>
@@ -197,10 +152,16 @@ export const Hero = () => {
 									<span>martin@portfolio:~$</span>
 									<Typewriter
 										text="ls ./current-focus"
-										typingSpeed={WHOAMI_TYPING_SPEED * 3}
-										onComplete={() => toggleProjectsList()}
+										typingSpeed={
+											ANIMATION_CONFIG.typingSpeedCommand
+										}
+										onComplete={
+											handleProjectsCommandComplete
+										}
 										enabled={visible.projects}
-										delay={500}
+										delay={
+											ANIMATION_CONFIG.betweenCommandsDelay
+										}
 									/>
 								</p>
 								<animated.div

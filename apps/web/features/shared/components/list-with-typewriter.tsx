@@ -29,22 +29,17 @@ export const ListWithTypewriter = ({
 	typingSpeed = 100,
 	betweenItemsDelay = 0,
 }: ListWithTypewriterProps) => {
-	const delays = useMemo(
-		() =>
-			items.map((_item, index) => {
-				if (index === 0) return initialDelay;
-				const prev = items
-					.slice(0, index)
-					.reduce((acc, curr) => acc + curr.len, 0);
-				const delay =
-					prev * typingSpeed +
-					initialDelay +
-					betweenItemsDelay * index;
-				console.log(delay);
-				return delay;
-			}),
-		[items, initialDelay, typingSpeed, betweenItemsDelay],
-	);
+	const delays = useMemo(() => {
+		let accumulatedLength = 0;
+		return items.map((_item, index) => {
+			const delay =
+				initialDelay +
+				accumulatedLength * typingSpeed +
+				betweenItemsDelay * index;
+			accumulatedLength += _item.len;
+			return delay;
+		});
+	}, [items, initialDelay, typingSpeed, betweenItemsDelay]);
 
 	return (
 		<div className={className}>

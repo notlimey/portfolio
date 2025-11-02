@@ -1,6 +1,6 @@
 'use client';
 import { cn } from '@common/lib/utils';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 type TypewriterProps = {
 	text: string;
@@ -21,41 +21,100 @@ export const Typewriter = ({
 }: TypewriterProps) => {
 	const [displayedText, setDisplayedText] = useState('');
 	const [isClient, setIsClient] = useState(false);
-	const [isTyping, setIsTyping] = useState(delay === 0);
+	const [isTyping, setIsTyping] = useState(false);
 
-	const fullTextRef = React.useRef(text);
+	const fullTextRef = useRef(text);
+	const timeoutRef = useRef<number | null>(null);
+	const intervalRef = useRef<number | null>(null);
+	const onCompleteRef = useRef(onComplete);
+
+	onCompleteRef.current = onComplete;
 
 	useEffect(() => {
-		if (!enabled) return;
-		if (delay <= 0) return;
-		const timeout = setTimeout(() => {
-			setIsTyping(true);
-		}, delay);
-		return () => clearTimeout(timeout);
-	}, [delay, enabled]);
+		if (isTyping) {
+			setIsClient(true);
+		}
+	}, [isTyping]);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: onComplete is not a dependency that should be included in the effect
+	useEffect(() => {
+		fullTextRef.current = text;
+		setDisplayedText('');
+		setIsTyping(false);
+
+		if (!enabled) return;
+
+		if (delay > 0) {
+			timeoutRef.current = window.setTimeout(() => {
+				setIsTyping(true);
+				timeoutRef.current = null;
+			}, delay);
+			return () => {
+				if (timeoutRef.current) {
+					window.clearTimeout(timeoutRef.current);
+					timeoutRef.current = null;
+				}
+			};
+		}
+
+		setIsTyping(true);
+
+		return () => {
+			if (timeoutRef.current) {
+				window.clearTimeout(timeoutRef.current);
+				timeoutRef.current = null;
+			}
+		};
+	}, [text, delay, enabled]);
+
 	useEffect(() => {
 		if (!isTyping) return;
 
-		setIsClient(true);
-
-		let i = 0;
+		let index = 0;
 		let currentText = '';
 
-		const typingInterval = setInterval(() => {
-			if (i < fullTextRef.current.length) {
-				currentText += fullTextRef.current.charAt(i);
-				setDisplayedText(currentText);
-				i++;
-			} else {
-				onComplete?.();
-				clearInterval(typingInterval);
-			}
-		}, typingSpeed);
+		if (intervalRef.current) {
+			window.clearInterval(intervalRef.current);
+		}
 
-		return () => clearInterval(typingInterval);
+		const intervalDelay = Math.max(typingSpeed, 1);
+
+		intervalRef.current = window.setInterval(() => {
+			const target = fullTextRef.current;
+			if (index < target.length) {
+				currentText += target.charAt(index);
+				setDisplayedText(currentText);
+				index += 1;
+				return;
+			}
+
+			if (intervalRef.current) {
+				window.clearInterval(intervalRef.current);
+				intervalRef.current = null;
+			}
+			onCompleteRef.current?.();
+		}, intervalDelay);
+
+		return () => {
+			if (intervalRef.current) {
+				window.clearInterval(intervalRef.current);
+				intervalRef.current = null;
+			}
+		};
 	}, [isTyping, typingSpeed]);
+
+	useEffect(
+		() => () => {
+			if (timeoutRef.current) {
+				window.clearTimeout(timeoutRef.current);
+				timeoutRef.current = null;
+			}
+			if (intervalRef.current) {
+				window.clearInterval(intervalRef.current);
+				intervalRef.current = null;
+			}
+		},
+		[],
+	);
 
 	return (
 		<span
