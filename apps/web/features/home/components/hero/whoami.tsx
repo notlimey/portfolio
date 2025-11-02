@@ -1,16 +1,62 @@
+import type { Homepage } from '@common/types/homepage.types';
+import { useMemo } from 'react';
+import type { Settings } from '~/shared/types';
 import { ChainedTypewriter } from '../../../shared/components/chained-typewriter';
 import { ListWithTypewriter } from '../../../shared/components/list-with-typewriter';
 import { Typewriter } from '../../../shared/components/typewriter';
 import { CliPrefix } from './cli';
-import { ANIMATION_CONFIG, WHOAMI_WITH_LENGTH } from './config';
+import { ANIMATION_CONFIG } from './config';
 import type { IHeroVisibleState, IWhoamiListItem } from './types';
 
 type WhoamiProps = {
 	visible: IHeroVisibleState;
 	toggleVisible: (key: keyof IHeroVisibleState) => void;
+	homepage: Homepage;
+	settings: Settings;
 };
 
-export const Whoami = ({ visible, toggleVisible }: WhoamiProps) => {
+export const Whoami = ({
+	visible,
+	toggleVisible,
+	homepage,
+	settings,
+}: WhoamiProps) => {
+	const whoamiItems = useMemo(
+		() =>
+			!homepage.whoami
+				? []
+				: [
+						{
+							label: 'name',
+							value: homepage.whoami.name,
+						},
+						{
+							label: 'role',
+							value: homepage.whoami.role,
+						},
+						{
+							label: 'location',
+							value: homepage.whoami.location,
+						},
+						{
+							label: 'current',
+							value: `${settings.currentWork?.position} @ ${settings.currentWork?.company}`,
+						},
+						{
+							label: 'stack',
+							value: `[${homepage.whoami.stack.join(', ')}]`,
+						},
+						{
+							label: 'ventures',
+							value: `${settings.ventures?.map((venture) => venture.name).join(', ')}`,
+						},
+					].map((x) => ({
+						...x,
+						len: x.value.length + x.label.length + 2,
+					})),
+		[homepage, settings],
+	);
+
 	return (
 		<div>
 			<p className="text-green-400 inline-flex items-center gap-2 whitespace-nowrap">
@@ -25,9 +71,8 @@ export const Whoami = ({ visible, toggleVisible }: WhoamiProps) => {
 
 			<div className="space-y-2 text-slate-300">
 				<ListWithTypewriter
-					items={WHOAMI_WITH_LENGTH.map((item, index) => {
-						const isLastItem =
-							index === WHOAMI_WITH_LENGTH.length - 1;
+					items={whoamiItems.map((item, index) => {
+						const isLastItem = index === whoamiItems.length - 1;
 						return {
 							key: item.label,
 							len: item.len,

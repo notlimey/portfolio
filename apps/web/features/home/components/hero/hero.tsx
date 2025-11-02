@@ -1,16 +1,24 @@
 'use client';
 import { Button } from '@common/components/ui/button';
+import type { Homepage } from '@common/types/homepage.types';
 import { animated } from '@react-spring/web';
 import { Code2, Github, Terminal } from 'lucide-react';
+import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import type { Settings } from '~/shared/types';
 import { Typewriter } from '../../../shared/components/typewriter';
 import { CliPrefix } from './cli';
 import { ANIMATION_CONFIG } from './config';
 import type { IHeroVisibleState } from './types';
 import { Whoami } from './whoami';
-import type { Homepage } from '@common/types/homepage.types';
 
-export const Hero = ({ homepage }: { homepage: Homepage }) => {
+export const Hero = ({
+	settings,
+	homepage,
+}: {
+	settings: Settings;
+	homepage: Homepage;
+}) => {
 	const [visible, setVisible] = useState<IHeroVisibleState>({
 		information: false,
 		projects: false,
@@ -95,6 +103,8 @@ export const Hero = ({ homepage }: { homepage: Homepage }) => {
 							<Whoami
 								visible={visible}
 								toggleVisible={toggleVisible}
+								homepage={homepage}
+								settings={settings}
 							/>
 
 							<animated.div
@@ -131,10 +141,10 @@ export const Hero = ({ homepage }: { homepage: Homepage }) => {
 								>
 									<div className="bg-slate-800 p-3 rounded border border-slate-700">
 										<div className="text-yellow-400 mb-1">
-											📁 full-stack-dev/
+											📁 crayon-consulting/
 										</div>
 										<div className="text-slate-400 text-xs">
-											Enterprise solutions
+											Consulting - Full-Stack Development
 										</div>
 									</div>
 									<div className="bg-slate-800 p-3 rounded border border-slate-700">
@@ -164,9 +174,17 @@ export const Hero = ({ homepage }: { homepage: Homepage }) => {
 								}
 								className="pt-4 flex flex-wrap gap-3"
 							>
-								<Button className="gap-2 bg-blue-600 hover:bg-blue-700">
-									<Github className="w-4 h-4" />
-									GitHub
+								<Button
+									className="bg-blue-600 hover:bg-blue-700"
+									asChild
+								>
+									<Link
+										href={settings.socials?.github ?? ''}
+										className="gap-2 cursor-pointer"
+									>
+										<Github className="w-4 h-4" />
+										GitHub
+									</Link>
 								</Button>
 								<Button
 									variant="outline"

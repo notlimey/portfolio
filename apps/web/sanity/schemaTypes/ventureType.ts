@@ -11,9 +11,24 @@ export const ventureSchema = defineType({
 			type: 'string',
 		}),
 		defineField({
+			name: 'slug',
+			title: 'Slug',
+			type: 'slug',
+			options: {
+				source: 'name',
+			},
+		}),
+		defineField({
 			name: 'description',
 			title: 'Description',
-			type: 'text',
+			type: 'array',
+			of: [
+				{
+					type: 'block',
+					styles: [{ title: 'Normal', value: 'normal' }],
+					lists: [],
+				},
+			],
 		}),
 		defineField({
 			name: 'type',
@@ -50,6 +65,28 @@ export const ventureSchema = defineType({
 					title: 'Alt',
 					type: 'string',
 				}),
+			],
+		}),
+		defineField({
+			name: 'metrics',
+			title: 'Metrics',
+			type: 'array',
+			of: [
+				{
+					type: 'object',
+					fields: [
+						defineField({
+							name: 'name',
+							title: 'Name',
+							type: 'string',
+						}),
+						defineField({
+							name: 'value',
+							title: 'Value',
+							type: 'string',
+						}),
+					],
+				},
 			],
 		}),
 		defineField({

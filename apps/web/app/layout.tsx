@@ -5,6 +5,7 @@ import { ThemeProvider } from '@common/providers/theme-provider';
 import { GlobalSchema } from '@common/structured-data/global';
 import { Toaster } from '@components/ui/sonner';
 import { BASE_URL } from '../configuration';
+import { Footer } from '~/shared/components/footer';
 
 const geistSans = localFont({
 	src: './fonts/GeistVF.woff',
@@ -30,6 +31,7 @@ export default function RootLayout({
 			<body className={`${geistSans.variable} ${geistMono.variable}`}>
 				{children}
 				<Toaster />
+				<Footer />
 			</body>
 		</html>
 	);

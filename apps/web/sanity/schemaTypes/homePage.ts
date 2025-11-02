@@ -10,6 +10,7 @@ export const homePage = defineType({
 			name: 'whoami',
 			title: 'Whoami',
 			icon: UserIcon,
+			default: true,
 		},
 		{
 			name: 'about',
@@ -32,6 +33,7 @@ export const homePage = defineType({
 			name: 'whoami',
 			title: 'Whoami',
 			type: 'object',
+			group: 'whoami',
 			fields: [
 				defineField({
 					name: 'name',
@@ -58,6 +60,7 @@ export const homePage = defineType({
 		}),
 		defineField({
 			name: 'highlightedProjects',
+			group: 'about',
 			title: 'Highlighted Projects',
 			type: 'array',
 			of: [

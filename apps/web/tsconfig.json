@@ -8,6 +8,7 @@
 		],
 
 		"paths": {
+			"~/*": ["./features/*"],
 			"@common/*": ["./common/*"],
 			"@components/*": ["./common/components/*"],
 			"@hooks/*": ["./common/hooks/*"],
@@ -21,10 +22,11 @@
 	},
 	"include": [
 		"next-env.d.ts",
-		"next.config.mjs",
+		"next.config.ts",
 		"**/*.ts",
 		"**/*.tsx",
-		".next/types/**/*.ts"
+		".next/types/**/*.ts",
+		"features/home/components/arsenal/arsenal.mdx"
 	],
 
 	"exclude": ["node_modules"]

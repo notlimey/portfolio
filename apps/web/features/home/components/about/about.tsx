@@ -1,45 +1,149 @@
 'use client';
-import { Card } from '@common/components/ui/card';
+import PortableText from '@common/components/blocks/PortableText';
 import { Badge } from '@common/components/ui/badge';
+import { Card } from '@common/components/ui/card';
+import type { Homepage } from '@common/types/homepage.types';
+import { toPlainText } from 'next-sanity';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import type { Homepage } from '@common/types/homepage.types';
+import type { Venture } from '~/projects/types/venture';
+import type { Work } from '~/projects/types/work';
+import type { Settings } from '~/shared/types';
 
-export function About({ homepage }: { homepage: Homepage }) {
-	const codeSnippet = `// Martin Kulvedrøsten Myhre
+const escapeSnippetValue = (value?: string) =>
+	(value ?? '').replace(/"/g, '\\"');
 
-class MartinMyhre implements Developer {
-  name = "Martin Kulvedrøsten Myhre";
-  location = "Elverum, Norway";
-  role = "Full-Stack Developer";
-  
+const formatArrayForSnippet = (items?: string[]) =>
+	items && items.length
+		? items.map((item) => `"${escapeSnippetValue(item)}"`).join(', ')
+		: '';
+
+const formatVenturesForSnippet = (ventures: Venture[] | undefined) => {
+	if (!ventures || ventures.length === 0) {
+		return '      // Add ventures in Sanity to see them here';
+	}
+
+	return ventures
+		.map((venture) => {
+			const snippetFields = [
+				`name: "${escapeSnippetValue(
+					venture.name ?? 'Untitled Venture',
+				)}"`,
+				venture.type
+					? `type: "${escapeSnippetValue(venture.type)}"`
+					: null,
+				venture.description
+					? `description: "${escapeSnippetValue(toPlainText(venture.description))}"`
+					: null,
+				venture.roles?.length
+					? `roles: [${formatArrayForSnippet(venture.roles)}]`
+					: null,
+			].filter(Boolean) as string[];
+
+			return `      {\n        ${snippetFields.join(',\n        ')}\n      }`;
+		})
+		.join(',\n');
+};
+
+export function About({
+	homepage,
+	settings,
+	ventures,
+	work,
+}: {
+	homepage: Homepage;
+	settings: Settings;
+	ventures: Venture[];
+	work: Work[];
+}) {
+	const whoami = homepage?.whoami ?? {
+		name: '',
+		location: '',
+		role: '',
+		stack: [],
+	};
+	const stack = whoami.stack ?? [];
+	const venturesSource =
+		(settings?.ventures && settings.ventures.length > 0
+			? settings.ventures
+			: ventures) ?? [];
+	const firstWork = work?.length > 0 ? work?.[0] : undefined;
+	const currentWork = settings?.currentWork ?? firstWork ?? null;
+	const currentWorkStack =
+		currentWork?.stack && currentWork.stack.length > 0
+			? currentWork.stack
+			: stack;
+	const passion =
+		homepage.hero?.description?.split('\n')[0] ??
+		'Building products that matter';
+
+	const classNameBase = escapeSnippetValue(whoami.name);
+	const className = classNameBase.replace(/\s+/g, '') || 'DeveloperProfile';
+
+	const venturesForSnippet = formatVenturesForSnippet(venturesSource);
+	const snippetStackWhoami = formatArrayForSnippet(stack);
+	const snippetStackWork = formatArrayForSnippet(currentWorkStack);
+	const snippetCompany = escapeSnippetValue(
+		currentWork?.company ?? 'Independent',
+	);
+	const snippetPosition = escapeSnippetValue(
+		currentWork?.position ?? 'Developer',
+	);
+	const snippetPassion = escapeSnippetValue(passion);
+
+	const codeSnippet = `class ${className} implements Developer {
+  name = "${escapeSnippetValue(whoami.name)}";
+  location = "${escapeSnippetValue(whoami.location)}";
+  role = "${escapeSnippetValue(whoami.role)}";
+  stack = [${snippetStackWhoami}];
+
   getCurrentWork(): WorkInfo {
     return {
-      company: "Crayon (prev. Inmeta)",
-      position: "Junior Consultant",
-      stack: ["TypeScript", ".NET", "Next.js", "Azure"]
+      company: "${snippetCompany}",
+      position: "${snippetPosition}",
+      stack: [${snippetStackWork}]
     };
   }
-  
+
   getVentures(): Venture[] {
     return [
-      {
-        name: "3Steps AS",
-        type: "Startup",
-        description: "Handball analytics platform"
-      },
-      {
-        name: "Limeyfy AS", 
-        type: "Agency",
-        description: "Web solutions for clients"
-      }
+${venturesForSnippet}
     ];
   }
-  
+
   getPassion(): string {
-    return "Building products that matter";
+    return "${snippetPassion}";
   }
 }`;
+
+	const quickFacts = [
+		whoami.location
+			? {
+					icon: '📍',
+					text: `Based in ${whoami.location}`,
+				}
+			: null,
+		currentWork?.company && currentWork?.position
+			? {
+					icon: '🏢',
+					text: `${currentWork.position} @ ${currentWork.company}`,
+				}
+			: null,
+		stack.length
+			? {
+					icon: '💻',
+					text: `Working with ${stack.join(', ')}`,
+				}
+			: null,
+		venturesSource.length
+			? {
+					icon: '🚀',
+					text: `${venturesSource.length} venture${
+						venturesSource.length === 1 ? '' : 's'
+					} in flight`,
+				}
+			: null,
+	].filter(Boolean) as { icon: string; text: string }[];
 
 	return (
 		<section className="py-20 bg-slate-900">
@@ -96,60 +200,106 @@ class MartinMyhre implements Developer {
 								<h3 className="text-white mb-3">
 									💼 Current Role
 								</h3>
-								<p className="text-slate-300 mb-2">
-									Junior Consultant at{' '}
-									<span className="text-blue-400 font-mono">
-										Crayon
-									</span>{' '}
-									<span className="text-slate-500 text-sm">
-										(prev. Inmeta)
-									</span>
-								</p>
-								<p className="text-slate-400">
-									Building full-stack solutions with
-									TypeScript and .NET. Working across the
-									entire stack - from frontend React/Next.js
-									to backend APIs, DevOps, and systems
-									programming.
-								</p>
+								{currentWork ? (
+									<>
+										<p className="text-slate-300 mb-2">
+											{currentWork.position}{' '}
+											{currentWork.company ? (
+												<>
+													at{' '}
+													<span className="text-blue-400 font-mono">
+														{currentWork.company}
+													</span>
+												</>
+											) : null}
+										</p>
+										<div className="text-slate-400">
+											{currentWork.description ? (
+												<PortableText
+													value={
+														currentWork.description ??
+														[]
+													}
+												/>
+											) : null}
+										</div>
+										{currentWorkStack.length > 0 ? (
+											<div className="flex flex-wrap gap-2 mt-4">
+												{currentWorkStack.map(
+													(tech, index) => (
+														<Badge
+															// biome-ignore lint/suspicious/noArrayIndexKey: tech is a string
+															key={`${tech}-${index}`}
+															className="bg-slate-900/60 text-slate-200 border-slate-700"
+														>
+															{tech}
+														</Badge>
+													),
+												)}
+											</div>
+										) : null}
+									</>
+								) : (
+									<p className="text-slate-400">
+										No current role listed yet. Add one in
+										Sanity settings to feature it here.
+									</p>
+								)}
 							</Card>
 
 							<Card className="p-6 bg-slate-800 border-slate-700">
 								<h3 className="text-white mb-3">
 									🚀 Entrepreneurship
 								</h3>
-								<div className="space-y-3">
-									<div>
-										<div className="flex items-center gap-2 mb-1">
-											<Badge className="bg-green-500/10 text-green-400 border-green-500/20">
-												3Steps AS
-											</Badge>
-											<span className="text-slate-400 text-sm">
-												Co-Founder
-											</span>
-										</div>
-										<p className="text-slate-400">
-											Revolutionizing handball with data.
-											Building analytics and management
-											tools for teams.
-										</p>
+								{venturesSource.length > 0 ? (
+									<div className="space-y-4">
+										{venturesSource.map((venture) => {
+											const meta = [
+												venture.roles?.length
+													? venture.roles.join(', ')
+													: null,
+												venture.type ?? null,
+											]
+												.filter(Boolean)
+												.join(' • ');
+
+											return (
+												<div
+													key={
+														venture._id ??
+														venture.name
+													}
+												>
+													<div className="flex items-center gap-2 mb-1">
+														<Badge className="bg-purple-500/10 text-purple-300 border-purple-500/20">
+															{venture.name}
+														</Badge>
+														{meta ? (
+															<span className="text-slate-400 text-sm">
+																{meta}
+															</span>
+														) : null}
+													</div>
+													<div className="text-slate-400">
+														{venture.description ? (
+															<PortableText
+																value={
+																	venture.description ??
+																	[]
+																}
+															/>
+														) : null}
+													</div>
+												</div>
+											);
+										})}
 									</div>
-									<div>
-										<div className="flex items-center gap-2 mb-1">
-											<Badge className="bg-purple-500/10 text-purple-400 border-purple-500/20">
-												Limeyfy AS
-											</Badge>
-											<span className="text-slate-400 text-sm">
-												Founder
-											</span>
-										</div>
-										<p className="text-slate-400">
-											Crafting web solutions for small
-											businesses. From concept to
-											deployment.
-										</p>
-									</div>
-								</div>
+								) : (
+									<p className="text-slate-400">
+										Showcase ventures by linking them in the
+										Sanity settings document.
+									</p>
+								)}
 							</Card>
 
 							<Card className="p-6 bg-gradient-to-br from-blue-500/10 to-purple-500/10 border-blue-500/20">
@@ -159,15 +309,24 @@ class MartinMyhre implements Developer {
 										<h3 className="text-white mb-2">
 											Quick Facts
 										</h3>
-										<ul className="space-y-1 text-slate-300">
-											<li>📍 Based in Elverum, Norway</li>
-											<li>💻 Full-stack enthusiast</li>
-											<li>
-												🏢 Corporate + Startup
-												experience
-											</li>
-											<li>🎯 Product-minded engineer</li>
-										</ul>
+										{quickFacts.length > 0 ? (
+											<ul className="space-y-2 text-slate-300">
+												{quickFacts.map((fact) => (
+													<li
+														key={fact.text}
+														className="flex items-center gap-2"
+													>
+														<span>{fact.icon}</span>
+														<span>{fact.text}</span>
+													</li>
+												))}
+											</ul>
+										) : (
+											<p className="text-slate-400">
+												Add more profile information to
+												populate quick facts.
+											</p>
+										)}
 									</div>
 								</div>
 							</Card>

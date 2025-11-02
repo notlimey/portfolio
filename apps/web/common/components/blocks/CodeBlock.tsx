@@ -1,3 +1,4 @@
+'use client';
 import type { CodeBlock as CodeBlockType } from '@common/types/blocks.types';
 import { CheckIcon, CopyIcon } from 'lucide-react';
 import { useState } from 'react';

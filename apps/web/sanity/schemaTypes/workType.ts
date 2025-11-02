@@ -11,6 +11,26 @@ export const workSchema = defineType({
 			type: 'string',
 		}),
 		defineField({
+			name: 'description',
+			title: 'Description',
+			type: 'array',
+			of: [
+				{
+					type: 'block',
+					styles: [{ title: 'Normal', value: 'normal' }],
+					lists: [],
+				},
+			],
+		}),
+		defineField({
+			name: 'slug',
+			title: 'Slug',
+			type: 'slug',
+			options: {
+				source: 'company',
+			},
+		}),
+		defineField({
 			name: 'position',
 			title: 'Position',
 			type: 'string',
@@ -32,11 +52,6 @@ export const workSchema = defineType({
 			type: 'date',
 		}),
 		defineField({
-			name: 'description',
-			title: 'Description',
-			type: 'text',
-		}),
-		defineField({
 			name: 'logo',
 			title: 'Logo',
 			type: 'image',
@@ -49,6 +64,28 @@ export const workSchema = defineType({
 					title: 'Alt',
 					type: 'string',
 				}),
+			],
+		}),
+		defineField({
+			name: 'metrics',
+			title: 'Metrics',
+			type: 'array',
+			of: [
+				{
+					type: 'object',
+					fields: [
+						defineField({
+							name: 'name',
+							title: 'Name',
+							type: 'string',
+						}),
+						defineField({
+							name: 'value',
+							title: 'Value',
+							type: 'string',
+						}),
+					],
+				},
 			],
 		}),
 		defineField({

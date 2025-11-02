@@ -1,12 +1,11 @@
 @use "tailwindcss";
-@custom-variant dark (&:is(.dark *));
 
 :root {
   --font-size: 16px;
-  --background: #ffffff;
-  --foreground: oklch(0.145 0 0);
-  --card: #ffffff;
-  --card-foreground: oklch(0.145 0 0);
+  --background: #030213;
+  --foreground: #ffffff;
+  --card: #030213;
+  --card-foreground: #FFFFFF;
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
   --primary: #030213;
@@ -97,6 +96,10 @@
  * Base typography. This is not applied to elements which have an ancestor with a Tailwind text class.
  */
 @layer base {
+  .inline-input {
+    @apply inline-flex h-5 w-full border border-input bg-background/50 text-sm py-1 px-1 rounded-sm focus:outline-none focus:ring-0;
+  }
+
   :where(:not(:has([class*=" text-"]), :not(:has([class^="text-"])))) {
     h1 {
       font-size: var(--text-2xl);
