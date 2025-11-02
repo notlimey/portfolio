@@ -1,32 +1,70 @@
+import { BookOpenIcon, Code, CpuIcon, GlobeIcon, UserIcon } from 'lucide-react';
 import { defineField, defineType } from 'sanity';
 
 export const homePage = defineType({
 	name: 'homePage',
 	title: 'Home Page',
 	type: 'document',
+	groups: [
+		{
+			name: 'whoami',
+			title: 'Whoami',
+			icon: UserIcon,
+		},
+		{
+			name: 'about',
+			title: 'About Me',
+			icon: Code,
+		},
+		{
+			name: 'arsenal',
+			title: 'Tech Arsenal',
+			icon: CpuIcon,
+		},
+		{
+			name: 'other',
+			title: 'Other',
+			icon: GlobeIcon,
+		},
+	],
 	fields: [
 		defineField({
-			name: 'hero',
-			title: 'Hero',
+			name: 'whoami',
+			title: 'Whoami',
 			type: 'object',
 			fields: [
 				defineField({
-					name: 'title',
-					title: 'Title',
+					name: 'name',
+					title: 'Name',
 					type: 'string',
 				}),
-
 				defineField({
-					name: 'description',
-					title: 'Description',
-					type: 'text',
+					name: 'location',
+					title: 'Location',
+					type: 'string',
 				}),
-
 				defineField({
-					name: 'image',
-					title: 'Image',
-					type: 'image',
+					name: 'role',
+					title: 'Role',
+					type: 'string',
 				}),
+				defineField({
+					name: 'stack',
+					title: 'Stack',
+					type: 'array',
+					of: [{ type: 'string' }],
+				}),
+			],
+		}),
+		defineField({
+			name: 'highlightedProjects',
+			title: 'Highlighted Projects',
+			type: 'array',
+			of: [
+				{
+					type: 'reference',
+					to: [{ type: 'work' }, { type: 'venture' }],
+				},
 			],
 		}),
 		defineField({

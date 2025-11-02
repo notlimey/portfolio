@@ -8,8 +8,9 @@ import { CliPrefix } from './cli';
 import { ANIMATION_CONFIG } from './config';
 import type { IHeroVisibleState } from './types';
 import { Whoami } from './whoami';
+import type { Homepage } from '@common/types/homepage.types';
 
-export const Hero = () => {
+export const Hero = ({ homepage }: { homepage: Homepage }) => {
 	const [visible, setVisible] = useState<IHeroVisibleState>({
 		information: false,
 		projects: false,

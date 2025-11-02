@@ -21,7 +21,21 @@ export const structure: StructureResolver = (S) =>
 				const id = item.getId();
 				return (
 					id &&
-					!['post', 'category', 'author', 'homePage'].includes(id)
+					![
+						'post',
+						'category',
+						'author',
+						'homePage',
+						'setting',
+					].includes(id)
 				);
 			}),
+			S.listItem()
+				.title('Settings')
+				.child(
+					S.editor()
+						.schemaType('setting')
+						.id('setting')
+						.title('Settings'),
+				),
 		]);

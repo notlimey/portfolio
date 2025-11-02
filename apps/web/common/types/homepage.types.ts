@@ -1,20 +1,13 @@
-import type { Post } from './post.types';
-import type { SanityImage } from './root.types';
+import type { Venture } from '../../features/projects/types/venture';
+import type { Work } from '../../features/projects/types/work';
 
 export type Homepage = {
 	_type: 'homePage';
-	latestPosts: Post[];
-	hero: {
-		image: SanityImage;
-		title: string;
-		description: string;
-	};
-	otherWebsitesTitle: string;
-	otherWebsites: {
+	whoami: {
 		name: string;
-		description: string;
-		url: string;
-		myRelation: string;
-	}[];
-	latestPostsTitle: string;
+		location: string;
+		role: string;
+		stack: string[];
+	};
+	highlightedProjects: (Work | Venture)[];
 };
