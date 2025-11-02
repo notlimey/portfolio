@@ -2,15 +2,15 @@
 import { Button } from '@common/components/ui/button';
 import { animated } from '@react-spring/web';
 import { Code2, Github, Terminal } from 'lucide-react';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ChainedTypewriter } from '../../shared/components/chained-typewriter';
-import { ListWithTypewriter } from '../../shared/components/list-with-typewriter';
-import { Typewriter } from '../../shared/components/typewriter';
-import { WhoamiListItem } from './hero/whoami-list-item';
-import { ANIMATION_CONFIG, WHOAMI_WITH_LENGTH } from './hero/config';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Typewriter } from '../../../shared/components/typewriter';
+import { CliPrefix } from './cli';
+import { ANIMATION_CONFIG } from './config';
+import type { IHeroVisibleState } from './types';
+import { Whoami } from './whoami';
 
 export const Hero = () => {
-	const [visible, setVisible] = useState({
+	const [visible, setVisible] = useState<IHeroVisibleState>({
 		information: false,
 		projects: false,
 		projectsList: false,
@@ -29,28 +29,6 @@ export const Hero = () => {
 			};
 		});
 	}, []);
-
-	const whoamiItems = useMemo(
-		() =>
-			WHOAMI_WITH_LENGTH.map((item, index) => {
-				const isLastItem = index === WHOAMI_WITH_LENGTH.length - 1;
-				return {
-					key: item.label,
-					len: item.len,
-					node: (delay: number) => (
-						<WhoamiListItem
-							item={item}
-							visible={visible.information}
-							toggleVisible={() => toggleVisible('projects')}
-							delay={delay}
-							typingSpeed={ANIMATION_CONFIG.typingSpeed}
-							isLastItem={isLastItem}
-						/>
-					),
-				};
-			}),
-		[toggleVisible, visible.information],
-	);
 
 	const handleProjectsCommandComplete = useCallback(() => {
 		if (projectsListTimeoutRef.current) {
@@ -95,7 +73,7 @@ export const Hero = () => {
 			{/* Grid background */}
 			<div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.1)_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,black,transparent)]" />
 
-			<div className="container mx-auto px-4 py-20 relative z-10">
+			<div className="container mx-auto px-4 py-20 relative z-10 text-sm md:text-base">
 				<div className="max-w-5xl mx-auto">
 					{/* Terminal Window */}
 					<div className="bg-slate-900 rounded-lg shadow-2xl border border-slate-800 overflow-hidden">
@@ -112,33 +90,11 @@ export const Hero = () => {
 							</div>
 						</div>
 
-						<div className="p-8 font-mono space-y-4">
-							<p className="text-green-400 inline-flex items-center gap-2 whitespace-nowrap">
-								<span>martin@portfolio:~$</span>
-								<Typewriter
-									text="whoami"
-									delay={
-										ANIMATION_CONFIG.betweenCommandsDelay
-									}
-									typingSpeed={
-										ANIMATION_CONFIG.typingSpeedCommand
-									}
-									onComplete={() =>
-										toggleVisible('information')
-									}
-								/>
-							</p>
-
-							<div className="space-y-2 text-slate-300">
-								<ListWithTypewriter
-									items={whoamiItems}
-									betweenItemsDelay={
-										ANIMATION_CONFIG.timeBetweenRows
-									}
-									typingSpeed={ANIMATION_CONFIG.typingSpeed}
-									className="flex gap-1 flex-col"
-								/>
-							</div>
+						<div className="p-5 md:p-8 font-mono space-y-4">
+							<Whoami
+								visible={visible}
+								toggleVisible={toggleVisible}
+							/>
 
 							<animated.div
 								className="pt-4"
@@ -149,7 +105,7 @@ export const Hero = () => {
 								}
 							>
 								<p className="text-green-400 mb-2 inline-flex items-center gap-2 whitespace-nowrap">
-									<span>martin@portfolio:~$</span>
+									<CliPrefix />
 									<Typewriter
 										text="ls ./current-focus"
 										typingSpeed={
@@ -228,7 +184,7 @@ export const Hero = () => {
 								}
 								className="text-green-400"
 							>
-								martin@portfolio:~${' '}
+								<CliPrefix />{' '}
 								<span className="animate-pulse">▋</span>
 							</animated.div>
 						</div>

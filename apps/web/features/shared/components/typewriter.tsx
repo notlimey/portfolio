@@ -122,13 +122,13 @@ export const Typewriter = ({
 			style={{ minWidth: 'fit-content' }}
 		>
 			{/* Invisible placeholder to reserve space and prevent layout shift */}
-			<span className="invisible whitespace-nowrap" aria-hidden="true">
+			<span className="invisible" aria-hidden="true">
 				{text}
 			</span>
 			{/* Visible typing text */}
 			<span
 				className={cn(
-					'absolute left-0 top-0 whitespace-nowrap',
+					'absolute left-0 top-0',
 					isClient ? 'opacity-100' : 'opacity-0',
 				)}
 			>

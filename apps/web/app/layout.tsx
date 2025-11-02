@@ -28,14 +28,7 @@ export default function RootLayout({
 				<GlobalSchema />
 			</head>
 			<body className={`${geistSans.variable} ${geistMono.variable}`}>
-				<ThemeProvider
-					attribute="class"
-					defaultTheme="system"
-					enableSystem
-					disableTransitionOnChange
-				>
-					{children}
-				</ThemeProvider>
+				{children}
 				<Toaster />
 			</body>
 		</html>
