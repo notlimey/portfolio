@@ -1,4 +1,5 @@
 // src/components/StructuredData/GlobalSchema.tsx
+import { BASE_URL } from '../../configuration';
 
 const jsonLd = {
 	'@context': 'https://schema.org',
@@ -81,8 +82,17 @@ const jsonLd = {
 		},
 		{
 			'@type': 'WebSite',
-			url: 'https://mkmyhre.com',
+			url: BASE_URL,
 			name: "Martin Kulvedrøsten Myhre's Personal Website",
+		},
+		// Add WebPage metadata for the homepage
+		{
+			'@type': 'WebPage',
+			url: BASE_URL,
+			name: 'Home — Martin Kulvedrøsten Myhre',
+			description:
+				'Senior Full-Stack Developer & Architect focusing on simplicity, performance, and privacy.',
+			isPartOf: { '@id': BASE_URL },
 		},
 	],
 };

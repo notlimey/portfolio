@@ -4,11 +4,28 @@ import { Badge } from '@common/components/ui/badge';
 import { Card } from '@common/components/ui/card';
 import type { Homepage } from '@common/types/homepage.types';
 import { toPlainText } from 'next-sanity';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import NextDynamic from 'next/dynamic';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import type { Venture } from '~/projects/types/venture';
 import type { Work } from '~/projects/types/work';
 import type { Settings } from '~/shared/types';
+import { useEffect, useState } from 'react';
+const SyntaxHighlighter = NextDynamic(
+	() =>
+		import('react-syntax-highlighter').then(
+			(m) => m.Prism as unknown as React.ComponentType<unknown>,
+		),
+	{ ssr: false },
+) as unknown as React.FC<{
+	language: string;
+	style: Record<string, React.CSSProperties>;
+	children?: React.ReactNode;
+	showLineNumbers?: boolean;
+	customStyle?: React.CSSProperties;
+	lineNumberStyle?:
+		| React.CSSProperties
+		| ((n: number) => React.CSSProperties);
+}>;
 
 const escapeSnippetValue = (value?: string) =>
 	(value ?? '').replace(/"/g, '\\"');
@@ -163,25 +180,7 @@ ${venturesForSnippet}
 								</div>
 							</div>
 							<div className="overflow-x-auto">
-								<SyntaxHighlighter
-									language="typescript"
-									style={vscDarkPlus}
-									showLineNumbers={true}
-									customStyle={{
-										margin: 0,
-										padding: '1rem',
-										background: 'transparent',
-										fontSize: '0.875rem',
-									}}
-									lineNumberStyle={{
-										minWidth: '2.5em',
-										paddingRight: '1em',
-										color: '#475569',
-										userSelect: 'none',
-									}}
-								>
-									{codeSnippet}
-								</SyntaxHighlighter>
+								<CodeSnippetSSR code={codeSnippet} />
 							</div>
 						</div>
 
@@ -337,3 +336,38 @@ ${venturesForSnippet}
 		</section>
 	);
 }
+
+const CodeSnippetSSR = ({ code }: { code: string }) => {
+	const [isClient, setIsClient] = useState(false);
+	useEffect(() => setIsClient(true), []);
+
+	if (!isClient) {
+		return (
+			<pre className="m-0 p-4 bg-transparent text-slate-200 text-sm overflow-x-auto">
+				<code>{code}</code>
+			</pre>
+		);
+	}
+
+	return (
+		<SyntaxHighlighter
+			language="typescript"
+			style={vscDarkPlus}
+			showLineNumbers={true}
+			customStyle={{
+				margin: 0,
+				padding: '1rem',
+				background: 'transparent',
+				fontSize: '0.875rem',
+			}}
+			lineNumberStyle={{
+				minWidth: '2.5em',
+				paddingRight: '1em',
+				color: '#475569',
+				userSelect: 'none',
+			}}
+		>
+			{code}
+		</SyntaxHighlighter>
+	);
+};

@@ -64,7 +64,7 @@ export const metadata: Metadata = {
 		siteName: AUTHORITATIVE_NAME,
 		images: [
 			{
-				url: `${BASE_URL}/public/og-image.png`, // Requires a specific OG image in /public
+				url: `${BASE_URL}/og-image.png`, // OG image served from /public at /og-image.png
 				width: 1200,
 				height: 630,
 				alt: AUTHORITATIVE_NAME,
@@ -77,9 +77,13 @@ export const metadata: Metadata = {
 		card: 'summary_large_image',
 		title: AUTHORITATIVE_NAME,
 		description: `Full-Stack Architect, CEO, and Optimizely Certified Developer.`,
-		images: [`${BASE_URL}/public/og-image.png`],
+		images: [`${BASE_URL}/og-image.png`],
 	},
 	alternates: {
 		canonical: BASE_URL,
+	},
+	icons: {
+		icon: '/favicon.ico',
+		apple: '/icon.jpeg',
 	},
 };

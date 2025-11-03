@@ -3,12 +3,10 @@ import type { Post } from '@common/types/post.types';
 import type { MetadataRoute } from 'next';
 import { client } from '../sanity/lib/client';
 import { BASE_URL } from '../configuration';
-import { format } from 'date-fns';
-
-const DATE_FORMAT = 'dd/MM/yyyy';
+// Use Date objects for lastModified to let Next.js format correctly
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-	const now = format(new Date(), DATE_FORMAT);
+	const now = new Date();
 
 	const site: MetadataRoute.Sitemap = [
 		{
@@ -25,7 +23,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	for (const post of posts) {
 		site.push({
 			url: `${BASE_URL}/posts/${post.slug}`,
-			lastModified: format(new Date(post._updatedAt), DATE_FORMAT),
+			lastModified: new Date(post._updatedAt),
 		});
 	}
 
