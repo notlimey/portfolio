@@ -42,4 +42,5 @@ export type Homepage = {
 	hero?: HomepageHero;
 	highlightedProjects: (Work | Venture)[];
 	settings?: HomepageSettings | null;
+	featuredPost?: Post | null;
 };

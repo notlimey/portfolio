@@ -71,6 +71,12 @@ export const homePage = defineType({
 			],
 		}),
 		defineField({
+			name: 'featuredPost',
+			title: 'Featured Post',
+			type: 'reference',
+			to: [{ type: 'post' }],
+		}),
+		defineField({
 			name: 'latestPosts',
 			title: 'Latest Posts title',
 			type: 'string',

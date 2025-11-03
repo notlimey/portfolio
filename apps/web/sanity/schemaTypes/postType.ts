@@ -39,6 +39,7 @@ export const postType = defineType({
 			name: 'category',
 			type: 'reference',
 			to: { type: 'category' },
+			validation: (Rule) => Rule.required(),
 		}),
 		defineField({
 			name: 'tags',
@@ -49,10 +50,12 @@ export const postType = defineType({
 					to: { type: 'tag' },
 				}),
 			],
+			validation: (Rule) => Rule.required(),
 		}),
 		defineField({
 			name: 'publishedAt',
 			type: 'datetime',
+			validation: (Rule) => Rule.required(),
 		}),
 		defineField({
 			name: 'body',

@@ -25,6 +25,7 @@ export const HOMEPAGE_QUERY = groq`*[_type == "homePage"][0]{
 			logo
 		}
 	},
+	featuredPost->${POST_QUERY_RAW},
 	"work": coalesce(*[_type == "work"]{
 		...,
 		logo

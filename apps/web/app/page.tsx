@@ -7,6 +7,7 @@ import { useHomepage } from '../features/home/hooks/use-homepage';
 import { useSettings } from '../features/shared/hooks/use-settings';
 import { useVentures } from '../features/shared/hooks/use-ventures';
 import { useWork } from '../features/shared/hooks/use-work';
+import { useLatestPosts } from '~/blog/hooks/use-posts';
 
 export const dynamic = 'force-static';
 
@@ -15,6 +16,9 @@ export default async function Home() {
 	const settings = await useSettings();
 	const ventures = await useVentures();
 	const work = await useWork();
+	const latestPosts = await useLatestPosts({
+		ignoreId: homePage.featuredPost?._id,
+	});
 
 	return (
 		<>
@@ -26,7 +30,10 @@ export default async function Home() {
 				work={work}
 			/>
 			<TechStackArsenal />
-			<LatestBlogPosts />
+			<LatestBlogPosts
+				latestPosts={latestPosts}
+				featuredPost={homePage.featuredPost}
+			/>
 			<ProjectsSection />
 		</>
 	);
