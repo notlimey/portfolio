@@ -1,15 +1,10 @@
 'use client';
-import { Badge } from '@common/components/ui/badge';
 import { Button } from '@common/components/ui/button';
-import { Card } from '@common/components/ui/card';
 import type { Post } from '@common/types/post.types';
-import { toPlainText } from '@portabletext/react';
-import { ArrowRight, BookOpen, Calendar, Clock } from 'lucide-react';
-import { DateDisplay } from '~/shared/components/date';
-import { ReadTime } from '~/shared/components/readtime';
-import { blogPosts } from './data';
-import { PostCard } from '~/blog/components/post-card';
+import { ArrowRight, BookOpen } from 'lucide-react';
+import Link from 'next/link';
 import { FeaturedPost } from '~/blog/components/featured-post';
+import { PostCard } from '~/blog/components/post-card';
 
 export function LatestBlogPosts({
 	latestPosts,
@@ -41,15 +36,20 @@ export function LatestBlogPosts({
 						))}
 					</div>
 
-					{/* Load More */}
 					<div className="text-center mt-12">
-						<Button
-							variant="outline"
-							size="lg"
-							className="border-slate-700 hover:bg-slate-900 hover:border-blue-500"
-						>
-							Load More Articles
-						</Button>
+						<Link href="/posts" className="cursor-pointer">
+							<Button
+								variant="outline"
+								size="lg"
+								className="border-slate-700 hover:bg-slate-900 hover:border-blue-500"
+								asChild
+							>
+								<span className="flex items-center gap-2">
+									See all posts
+									<ArrowRight className="w-4 h-4" />
+								</span>
+							</Button>
+						</Link>
 					</div>
 				</div>
 			</div>

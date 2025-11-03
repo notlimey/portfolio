@@ -8,11 +8,10 @@ import { DateDisplay } from '~/shared/components/date';
 import { ReadTime } from '~/shared/components/readtime';
 
 export const PostCard = ({ post }: { post: Post }) => (
-	<Link href={`/posts/${post.slug}`}>
+	<Link href={`/posts/${post.slug}`} className="cursor-pointer">
 		<Card
 			key={post._id}
 			className="p-6 bg-slate-900 border-slate-800 hover:border-blue-500/50 transition-all group cursor-pointer"
-			onClick={() => {}}
 		>
 			<div className="mb-3">
 				<Badge
