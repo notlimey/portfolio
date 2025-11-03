@@ -20,7 +20,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 			lastModified: now,
 		},
 	];
-	const posts: Post[] = await client.fetch(POSTS_QUERY);
+	const posts: Post[] = await client.fetch(POSTS_QUERY, { tagIds: [] });
 
 	for (const post of posts) {
 		site.push({

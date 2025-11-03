@@ -21,6 +21,7 @@ export const generateMetadata = async ({ params }: PageProps) => {
 	const { slug } = await params;
 	const post: Post = await client.fetch(POST_BY_SLUG_QUERY, {
 		slug,
+		tagIds: [],
 	});
 
 	if (!post) {
@@ -44,7 +45,10 @@ export const generateMetadata = async ({ params }: PageProps) => {
 
 export default async function PostPage({ params }: PageProps) {
 	const { slug } = await params;
-	const post: Post = await client.fetch(POST_BY_SLUG_QUERY, { slug });
+	const post: Post = await client.fetch(POST_BY_SLUG_QUERY, {
+		slug,
+		tagIds: [],
+	});
 
 	if (!post) return notFound();
 

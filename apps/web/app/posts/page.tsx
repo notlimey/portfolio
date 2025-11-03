@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 };
 
 export default async function PostsPage() {
-	const posts: Post[] = await client.fetch(POSTS_QUERY);
+	const posts: Post[] = await client.fetch(POSTS_QUERY, { tagIds: [] });
 
 	return (
 		<div className="mx-auto flex max-w-[1240px] flex-col gap-5 px-5 py-12 lg:py-24">

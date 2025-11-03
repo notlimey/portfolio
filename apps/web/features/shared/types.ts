@@ -13,3 +13,11 @@ export type Settings = {
 	ventures?: Venture[];
 	socials?: SettingsSocials;
 };
+
+export type Tag = {
+	_type: 'tag';
+	_id: string;
+	_createdAt: string;
+	_updatedAt: string;
+	name: string;
+};

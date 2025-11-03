@@ -154,3 +154,24 @@
 html {
   font-size: var(--font-size);
 }
+
+.article-content {
+  h1 {
+    @apply text-4xl text-white mt-12 mb-6;
+  }
+  h2 {
+    @apply text-3xl text-white mt-10 mb-4;
+  }
+  h3 {
+    @apply text-2xl text-white mt-8 mb-4;
+  }
+  h4 {
+    @apply text-xl text-white mt-6 mb-4;
+  }
+  p {
+    @apply text-slate-300 leading-relaxed;
+  }
+  li {
+    @apply ml-6 text-slate-300;
+  }
+}

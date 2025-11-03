@@ -32,6 +32,5 @@ export const HOMEPAGE_QUERY = groq`*[_type == "homePage"][0]{
 	"ventures": coalesce(*[_type == "venture"]{
 		...,
 		logo
-	}, []),
-	"latestPosts": *[_type == "post" && publishedAt < now()] | order(publishedAt desc) [0...3]${POST_QUERY_RAW},
+	}, [])
 }`;

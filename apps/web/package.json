@@ -4,8 +4,11 @@
 	"private": true,
 	"scripts": {
 		"dev": "next dev",
+		"dev:sanity": "sanity dev",
 		"build": "next build",
-		"start": "next start"
+		"build:sanity": "sanity build",
+		"start": "next start",
+		"deploy:sanity": "sanity deploy"
 	},
 	"dependencies": {
 		"@portabletext/react": "^3.1.0",

@@ -8,9 +8,7 @@ import { ReadTime } from '~/shared/components/readtime';
 import { useRelatedPosts } from '../hooks/use-posts';
 
 export const RelatedPosts = async ({ post: currentPost }: { post: Post }) => {
-	const relatedPosts: Post[] = await useRelatedPosts({
-		slug: currentPost.slug,
-	});
+	const relatedPosts: Post[] = await useRelatedPosts(currentPost);
 
 	if (relatedPosts.length === 0) return null;
 
@@ -28,13 +26,13 @@ export const RelatedPosts = async ({ post: currentPost }: { post: Post }) => {
 							className="h-full"
 						>
 							<Card className="p-6 bg-slate-900 border-slate-800 hover:border-blue-500/50 transition-all group cursor-pointer h-full">
-								{post.categories?.map((category) => (
+								{post.tags?.map((category) => (
 									<Badge
-										key={category.slug}
+										key={category._id}
 										variant="outline"
 										className="border-slate-700 text-slate-400 mb-3"
 									>
-										{category.title}
+										{category.name}
 									</Badge>
 								))}
 								<h3 className="text-white mb-2 group-hover:text-blue-400 transition-colors">

@@ -4,7 +4,7 @@ import type { Post } from '@common/types/post.types';
 export const BlogContent = ({ post }: { post: Post }) => {
 	return (
 		<div className="prose prose-invert prose-slate max-w-none">
-			<div className="text-slate-300 space-y-6">
+			<div className="text-slate-300 space-y-6 article-content">
 				<PortableText value={post.body ?? []} />
 			</div>
 		</div>
