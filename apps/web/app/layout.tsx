@@ -1,11 +1,11 @@
-import type { Metadata } from 'next';
-import localFont from 'next/font/local';
-import './globals.scss';
-import { ThemeProvider } from '@common/providers/theme-provider';
 import { GlobalSchema } from '@common/structured-data/global';
 import { Toaster } from '@components/ui/sonner';
-import { BASE_URL } from '../configuration';
+import type { Metadata } from 'next';
+import localFont from 'next/font/local';
 import { Footer } from '~/shared/components/footer';
+import { Providers } from '~/shared/components/providers';
+import { BASE_URL } from '../configuration';
+import './globals.scss';
 
 const geistSans = localFont({
 	src: './fonts/GeistVF.woff',
@@ -29,7 +29,7 @@ export default function RootLayout({
 				<GlobalSchema />
 			</head>
 			<body className={`${geistSans.variable} ${geistMono.variable}`}>
-				{children}
+				<Providers>{children}</Providers>
 				<Toaster />
 				<Footer />
 			</body>
