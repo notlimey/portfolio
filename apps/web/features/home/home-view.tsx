@@ -52,7 +52,7 @@ export const HomePageContent = async ({ isBot }: { isBot: boolean }) => {
 			<h1 className="sr-only">
 				Martin Kulvedrøsten Myhre — Full-Stack Developer & Architect
 			</h1>
-			<Hero settings={settings} homepage={homePage} ssr={isBot} />
+			<Hero settings={settings} homepage={homePage} />
 			<About
 				homepage={homePage}
 				settings={settings}
