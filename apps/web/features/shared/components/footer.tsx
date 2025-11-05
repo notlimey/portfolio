@@ -1,8 +1,12 @@
-import { Github, Linkedin, Mail, Twitter, Terminal } from 'lucide-react';
+import { Github, Linkedin, Mail, Terminal } from 'lucide-react';
 import { Button } from '@common/components/ui/button';
+import { useSettings } from '../hooks/use-settings';
+import Link from 'next/link';
 
-export function Footer() {
+export async function Footer() {
 	const currentYear = new Date().getFullYear();
+	const settings = await useSettings();
+	const socials = settings?.socials;
 
 	return (
 		<footer className="bg-slate-950 border-t border-slate-800">
@@ -28,34 +32,50 @@ export function Footer() {
 						<div>
 							<h3 className="text-white mb-4">Connect</h3>
 							<div className="flex flex-wrap gap-3 mb-4">
-								<Button
-									variant="outline"
-									size="icon"
-									className="border-slate-700 hover:border-blue-500 hover:bg-slate-900"
-								>
-									<Github className="w-4 h-4" />
-								</Button>
-								<Button
-									variant="outline"
-									size="icon"
-									className="border-slate-700 hover:border-blue-500 hover:bg-slate-900"
-								>
-									<Linkedin className="w-4 h-4" />
-								</Button>
-								<Button
-									variant="outline"
-									size="icon"
-									className="border-slate-700 hover:border-blue-500 hover:bg-slate-900"
-								>
-									<Twitter className="w-4 h-4" />
-								</Button>
-								<Button
-									variant="outline"
-									size="icon"
-									className="border-slate-700 hover:border-blue-500 hover:bg-slate-900"
-								>
-									<Mail className="w-4 h-4" />
-								</Button>
+								{socials?.github && (
+									<Button
+										variant="outline"
+										size="icon"
+										className="border-slate-700 hover:border-blue-500 hover:bg-slate-900"
+										asChild
+									>
+										<Link
+											href={socials.github}
+											target="_blank"
+											rel="noopener noreferrer"
+										>
+											<Github className="w-4 h-4" />
+										</Link>
+									</Button>
+								)}
+								{socials?.linkedin && (
+									<Button
+										variant="outline"
+										size="icon"
+										className="border-slate-700 hover:border-blue-500 hover:bg-slate-900"
+										asChild
+									>
+										<Link
+											href={socials.linkedin}
+											target="_blank"
+											rel="noopener noreferrer"
+										>
+											<Linkedin className="w-4 h-4" />
+										</Link>
+									</Button>
+								)}
+								{socials?.email && (
+									<Button
+										variant="outline"
+										size="icon"
+										className="border-slate-700 hover:border-blue-500 hover:bg-slate-900"
+										asChild
+									>
+										<Link href={`mailto:${socials.email}`}>
+											<Mail className="w-4 h-4" />
+										</Link>
+									</Button>
+								)}
 							</div>
 							<div className="text-slate-500 text-sm font-mono">
 								<div>

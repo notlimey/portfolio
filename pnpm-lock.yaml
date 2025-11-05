@@ -60,6 +60,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@notionhq/client':
+        specifier: ^5.3.0
+        version: 5.3.0
       '@portabletext/react':
         specifier: ^3.1.0
         version: 3.2.4(react@19.2.0)
@@ -3078,6 +3081,11 @@ packages:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.19.1
+
+  /@notionhq/client@5.3.0:
+    resolution: {integrity: sha512-pISuJLrP6XwxnmMZ79jT2XkMHFtbQvslfs6Rqdd29ge0KAmJOuhtWZxE1WXO7h03cj/gVAL2PiAjpFuIWrWJ3w==}
+    engines: {node: '>=18'}
+    dev: false
 
   /@oclif/core@4.5.4:
     resolution: {integrity: sha512-78YYJls8+KG96tReyUsesKKIKqC0qbFSY1peUSrt0P2uGsrgAuU9axQ0iBQdhAlIwZDcTyaj+XXVQkz2kl/O0w==}

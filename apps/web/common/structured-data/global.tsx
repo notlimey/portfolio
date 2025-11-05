@@ -45,7 +45,6 @@ const jsonLd = {
 			sameAs: [
 				'https://www.linkedin.com/in/martinkmyhre',
 				'https://github.com/notlimey',
-				'https://twitter.com/martinkmyhre',
 				'https://3steps.no',
 				'https://limeyfy.no',
 			],

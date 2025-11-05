@@ -1,7 +1,6 @@
 'use client';
 import PortableText from '@common/components/blocks/PortableText';
 import { Avatar, AvatarImage } from '@common/components/ui/avatar';
-import { Button } from '@common/components/ui/button';
 import { Card } from '@common/components/ui/card';
 import type { Author } from '@common/types/author.types';
 import { urlFor } from '../../../sanity/lib/image';
@@ -21,18 +20,6 @@ export const BlogAuthor = ({ author }: { author: Author }) => (
 				<h3 className="text-white text-xl mb-2">{author.name}</h3>
 				<div className="text-slate-400 mb-4">
 					<PortableText value={author.bio ?? []} />
-				</div>
-				<div className="flex gap-3">
-					<Button
-						variant="outline"
-						size="sm"
-						className="border-slate-700 hover:bg-slate-800"
-						onClick={() =>
-							window.scrollTo({ top: 0, behavior: 'smooth' })
-						}
-					>
-						View More Articles
-					</Button>
 				</div>
 			</div>
 		</div>

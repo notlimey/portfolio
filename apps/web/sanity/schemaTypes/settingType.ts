@@ -37,6 +37,11 @@ export const settingSchema = defineType({
 					title: 'LinkedIn',
 					type: 'url',
 				}),
+				defineField({
+					name: 'email',
+					title: 'Email',
+					type: 'string',
+				}),
 			],
 		}),
 	],
