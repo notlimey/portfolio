@@ -10,6 +10,7 @@ import type { Venture } from '~/projects/types/venture';
 import type { Work } from '~/projects/types/work';
 import type { Settings } from '~/shared/types';
 import { useEffect, useState } from 'react';
+import { cn } from '@common/lib/utils';
 const SyntaxHighlighter = NextDynamic(
 	() =>
 		import('react-syntax-highlighter').then(
@@ -162,6 +163,16 @@ ${venturesForSnippet}
 			: null,
 	].filter(Boolean) as { icon: string; text: string }[];
 
+	const colors = {
+		purple: 'bg-purple-500/10 text-purple-300 border-purple-500/20',
+		pink: 'bg-pink-500/10 text-pink-300 border-pink-500/20',
+		blue: 'bg-blue-500/10 text-blue-300 border-blue-500/20',
+		orange: 'bg-orange-500/10 text-orange-300 border-orange-500/20',
+		yellow: 'bg-yellow-500/10 text-yellow-300 border-yellow-500/20',
+		green: 'bg-green-500/10 text-green-300 border-green-500/20',
+		red: 'bg-red-500/10 text-red-300 border-red-500/20',
+	};
+
 	return (
 		<section className="py-20 bg-slate-900">
 			<div className="container mx-auto px-4">
@@ -270,7 +281,14 @@ ${venturesForSnippet}
 													}
 												>
 													<div className="flex items-center gap-2 mb-1">
-														<Badge className="bg-purple-500/10 text-purple-300 border-purple-500/20">
+														<Badge
+															className={cn(
+																colors[
+																	venture.color ??
+																		'purple'
+																],
+															)}
+														>
 															{venture.name}
 														</Badge>
 														{meta ? (
@@ -279,7 +297,7 @@ ${venturesForSnippet}
 															</span>
 														) : null}
 													</div>
-													<div className="text-slate-400">
+													<div className="richtext text-slate-400 article-content">
 														{venture.description ? (
 															<PortableText
 																value={
@@ -309,13 +327,13 @@ ${venturesForSnippet}
 											Quick Facts
 										</h3>
 										{quickFacts.length > 0 ? (
-											<ul className="space-y-2 text-slate-300">
+											<ul className="space-y-2 text-slate-300 -ml-[14px]">
 												{quickFacts.map((fact) => (
 													<li
 														key={fact.text}
 														className="flex items-center gap-2"
 													>
-														<span>{fact.icon}</span>
+														<span>-</span>
 														<span>{fact.text}</span>
 													</li>
 												))}

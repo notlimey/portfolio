@@ -24,7 +24,10 @@
 		"@sanity/image-url": "^1.2.0",
 		"@sanity/vision": "^4.12.0",
 		"@tailwindcss/postcss": "^4.1.16",
+		"@tanstack/react-form": "^1.23.8",
 		"@tanstack/react-query": "^5.90.6",
+		"@tanstack/zod-form-adapter": "^0.42.1",
+		"axios": "^1.13.2",
 		"class-variance-authority": "^0.7.0",
 		"clsx": "^2.1.1",
 		"date-fns": "^4.1.0",
@@ -37,12 +40,14 @@
 		"react-refractor": "^3.1.1",
 		"react-syntax-highlighter": "^16.1.0",
 		"refractor": "^4.8.1",
+		"resend": "^6.4.1",
 		"sanity": "^4.12.0",
 		"sass": "^1.77.8",
 		"sonner": "^1.5.0",
 		"styled-components": "6",
 		"tailwind-merge": "^2.5.2",
-		"tailwindcss-animate": "^1.0.7"
+		"tailwindcss-animate": "^1.0.7",
+		"zod": "^4.1.12"
 	},
 	"devDependencies": {
 		"@repo/typescript-config": "workspace:*",
