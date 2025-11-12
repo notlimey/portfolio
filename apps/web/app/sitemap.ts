@@ -3,7 +3,6 @@ import type { Post } from '@common/types/post.types';
 import type { MetadataRoute } from 'next';
 import { client } from '../sanity/lib/client';
 import { BASE_URL } from '../configuration';
-// Use Date objects for lastModified to let Next.js format correctly
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	const now = new Date();
