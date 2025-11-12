@@ -147,9 +147,12 @@ export const HeroWindowContent = ({
 				<Button
 					variant="outline"
 					className="gap-2 border-slate-700 hover:bg-slate-800"
+					asChild
 				>
-					<Code2 className="w-4 h-4" />
-					View Projects
+					<Link href="#projects">
+						<Code2 className="w-4 h-4" />
+						View Projects
+					</Link>
 				</Button>
 			</animated.div>
 
