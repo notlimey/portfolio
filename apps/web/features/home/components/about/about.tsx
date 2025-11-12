@@ -11,11 +11,9 @@ import type { Work } from '~/projects/types/work';
 import type { Settings } from '~/shared/types';
 import { useEffect, useState } from 'react';
 import { cn } from '@common/lib/utils';
+
 const SyntaxHighlighter = NextDynamic(
-	() =>
-		import('react-syntax-highlighter').then(
-			(m) => m.Prism as unknown as React.ComponentType<unknown>,
-		),
+	() => import('react-syntax-highlighter').then((m) => m.Prism),
 	{ ssr: false },
 ) as unknown as React.FC<{
 	language: string;
@@ -32,7 +30,7 @@ const escapeSnippetValue = (value?: string) =>
 	(value ?? '').replace(/"/g, '\\"');
 
 const formatArrayForSnippet = (items?: string[]) =>
-	items && items.length
+	items?.length
 		? items.map((item) => `"${escapeSnippetValue(item)}"`).join(', ')
 		: '';
 
