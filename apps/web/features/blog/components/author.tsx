@@ -11,7 +11,14 @@ export const BlogAuthor = ({ author }: { author: Author }) => (
 			<div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-2xl flex-shrink-0">
 				<Avatar className="size-20">
 					<AvatarImage
-						src={author.image ? urlFor(author.image).url() : ''}
+						src={
+							author.image
+								? urlFor(author.image)
+										.width(80)
+										.height(80)
+										.url()
+								: ''
+						}
 						alt={author.name}
 					/>
 				</Avatar>

@@ -62,12 +62,20 @@ export function Projects({ currentWork, ventures }: Settings) {
 															project.logo
 																? urlFor(
 																		project.logo,
-																	).url()
+																	)
+																		.width(
+																			48,
+																		)
+																		.height(
+																			48,
+																		)
+																		.url()
 																: '/images/logo.svg'
 														}
 														alt={`${name} logo`}
 														width={48}
 														height={48}
+														loading="lazy"
 													/>
 												</div>
 												<div>

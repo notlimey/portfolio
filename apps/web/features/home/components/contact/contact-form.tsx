@@ -96,6 +96,11 @@ export const ContactForm = () => {
 									field.handleChange(e.target.value)
 								}
 								onBlur={field.handleBlur}
+								aria-label="Subject"
+								aria-required="true"
+								aria-invalid={
+									field.state.meta.errors.length > 0
+								}
 							/>
 						)}
 					</form.Field>
@@ -123,6 +128,11 @@ export const ContactForm = () => {
 									field.handleChange(e.target.value)
 								}
 								onBlur={field.handleBlur}
+								aria-label="Name"
+								aria-required="true"
+								aria-invalid={
+									field.state.meta.errors.length > 0
+								}
 							/>
 						)}
 					</form.Field>
@@ -151,6 +161,11 @@ export const ContactForm = () => {
 									field.handleChange(e.target.value)
 								}
 								onBlur={field.handleBlur}
+								aria-label="Email"
+								aria-required="true"
+								aria-invalid={
+									field.state.meta.errors.length > 0
+								}
 							/>
 						)}
 					</form.Field>
@@ -181,6 +196,11 @@ export const ContactForm = () => {
 									field.handleChange(e.target.value)
 								}
 								onBlur={field.handleBlur}
+								aria-label="Message"
+								aria-required="true"
+								aria-invalid={
+									field.state.meta.errors.length > 0
+								}
 							/>
 						)}
 					</form.Field>

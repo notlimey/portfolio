@@ -1,4 +1,4 @@
-import { POST_BY_SLUG_QUERY } from '@common/queries/blog.queries';
+import { POST_BY_SLUG_QUERY, POSTS_QUERY } from '@common/queries/blog.queries';
 import { PostJsonLd } from '@common/structured-data/post-json-ld';
 import type { Post } from '@common/types/post.types';
 import type { Metadata } from 'next';
@@ -17,6 +17,15 @@ type PageProps = {
 	params: Promise<{ slug: string }>;
 };
 
+export async function generateStaticParams() {
+	const posts: Post[] = await client.fetch(POSTS_QUERY, { tagIds: [] });
+	return posts.map((post) => ({
+		slug: post.slug,
+	}));
+}
+
+export const revalidate = 3600;
+
 export const generateMetadata = async ({ params }: PageProps) => {
 	const { slug } = await params;
 	const post: Post = await client.fetch(POST_BY_SLUG_QUERY, {
@@ -28,14 +37,36 @@ export const generateMetadata = async ({ params }: PageProps) => {
 		return {};
 	}
 
+	const imageUrl = post.mainImage
+		? urlFor(post.mainImage).width(1200).height(630).url()
+		: `${BASE_URL}/og-image.png`;
+
 	return {
 		title: post?.title,
 		description: `${toPlainText(post?.body ?? []).slice(0, 150)}...`,
 		openGraph: {
-			images: post.mainImage ? [urlFor(post.mainImage).url()] : [],
+			title: post?.title,
+			description: `${toPlainText(post?.body ?? []).slice(0, 150)}...`,
+			images: [
+				{
+					url: imageUrl,
+					width: 1200,
+					height: 630,
+					alt:
+						post.mainImage?.alt || post?.title || 'Blog post image',
+				},
+			],
+			type: 'article',
+			publishedTime: post.publishedAt,
+			modifiedTime: post._updatedAt,
+			authors: post.author?.name ? [post.author.name] : undefined,
+			tags: post.tags?.map((tag) => tag.name),
 		},
 		twitter: {
-			images: post.mainImage ? [urlFor(post.mainImage).url()] : [],
+			card: 'summary_large_image',
+			title: post?.title,
+			description: `${toPlainText(post?.body ?? []).slice(0, 150)}...`,
+			images: [imageUrl],
 		},
 		alternates: {
 			canonical: post.canonicalUrl || `${BASE_URL}/posts/${post.slug}`,

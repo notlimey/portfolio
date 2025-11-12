@@ -58,6 +58,7 @@ export function generatePostJsonLd(post: Post) {
 			'@type': 'ImageObject',
 			url: imageUrl,
 			width: 1200,
+			height: 630,
 		};
 	}
 
