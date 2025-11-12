@@ -1,4 +1,5 @@
 'use client';
+
 import { cn } from '@common/lib/utils';
 import { useEffect, useRef, useState } from 'react';
 
@@ -14,126 +15,85 @@ type TypewriterProps = {
 export const Typewriter = ({
 	text,
 	delay = 0,
-	className = '',
 	typingSpeed = 100,
+	className = '',
 	onComplete,
 	enabled = true,
 }: TypewriterProps) => {
 	const [displayedText, setDisplayedText] = useState('');
-	const [isClient, setIsClient] = useState(false);
 	const [isTyping, setIsTyping] = useState(false);
+	const hasCompletedRef = useRef(false);
+	const hasStartedTypingRef = useRef(false);
 
-	const fullTextRef = useRef(text);
-	const timeoutRef = useRef<number | null>(null);
-	const intervalRef = useRef<number | null>(null);
 	const onCompleteRef = useRef(onComplete);
-
 	onCompleteRef.current = onComplete;
 
 	useEffect(() => {
-		if (isTyping) {
-			setIsClient(true);
+		if (!enabled) {
+			setDisplayedText('');
+			setIsTyping(false);
+			hasCompletedRef.current = false;
+			hasStartedTypingRef.current = false;
+			return;
 		}
-	}, [isTyping]);
 
-	useEffect(() => {
-		fullTextRef.current = text;
 		setDisplayedText('');
 		setIsTyping(false);
+		hasCompletedRef.current = false;
+		hasStartedTypingRef.current = false;
 
-		if (!enabled) return;
+		const delayTimeout = window.setTimeout(() => {
+			setIsTyping(true);
+			hasStartedTypingRef.current = true;
+		}, delay);
 
-		if (delay > 0) {
-			timeoutRef.current = window.setTimeout(() => {
-				setIsTyping(true);
-				timeoutRef.current = null;
-			}, delay);
-			return () => {
-				if (timeoutRef.current) {
-					window.clearTimeout(timeoutRef.current);
-					timeoutRef.current = null;
-				}
-			};
-		}
-
-		setIsTyping(true);
-
-		return () => {
-			if (timeoutRef.current) {
-				window.clearTimeout(timeoutRef.current);
-				timeoutRef.current = null;
-			}
-		};
-	}, [text, delay, enabled]);
+		return () => window.clearTimeout(delayTimeout);
+	}, [delay, enabled]);
 
 	useEffect(() => {
-		if (!isTyping) return;
+		if (!isTyping || !enabled) return;
 
-		let index = 0;
-		let currentText = '';
+		const effectiveSpeed = Math.max(typingSpeed, 1);
 
-		if (intervalRef.current) {
-			window.clearInterval(intervalRef.current);
-		}
+		const interval = window.setInterval(() => {
+			setDisplayedText((prev) => {
+				if (prev.length >= text.length) {
+					window.clearInterval(interval);
+					setIsTyping(false);
+					return text;
+				}
 
-		const intervalDelay = Math.max(typingSpeed, 1);
+				return text.substring(0, prev.length + 1);
+			});
+		}, effectiveSpeed);
 
-		intervalRef.current = window.setInterval(() => {
-			const target = fullTextRef.current;
-			if (index < target.length) {
-				currentText += target.charAt(index);
-				setDisplayedText(currentText);
-				index += 1;
-				return;
-			}
+		return () => window.clearInterval(interval);
+	}, [isTyping, text, typingSpeed, enabled]);
 
-			if (intervalRef.current) {
-				window.clearInterval(intervalRef.current);
-				intervalRef.current = null;
-			}
+	useEffect(() => {
+		if (
+			displayedText === text &&
+			text.length > 0 &&
+			!hasCompletedRef.current &&
+			enabled &&
+			hasStartedTypingRef.current &&
+			!isTyping
+		) {
+			hasCompletedRef.current = true;
 			onCompleteRef.current?.();
-		}, intervalDelay);
-
-		return () => {
-			if (intervalRef.current) {
-				window.clearInterval(intervalRef.current);
-				intervalRef.current = null;
-			}
-		};
-	}, [isTyping, typingSpeed]);
-
-	useEffect(
-		() => () => {
-			if (timeoutRef.current) {
-				window.clearTimeout(timeoutRef.current);
-				timeoutRef.current = null;
-			}
-			if (intervalRef.current) {
-				window.clearInterval(intervalRef.current);
-				intervalRef.current = null;
-			}
-		},
-		[],
-	);
+		}
+	}, [displayedText, text, enabled, isTyping]);
 
 	return (
 		<span
-			className={`${className} relative inline-block`}
+			className={cn('relative inline-block', className)}
 			style={{ minWidth: 'fit-content' }}
 		>
-			{/* Invisible placeholder to reserve space and prevent layout shift */}
-			<span className="invisible" aria-hidden="true">
+			<span className="invisible opacity-0" aria-hidden="true">
 				{text}
 			</span>
-			{/* Visible typing text */}
-			<span
-				className={cn(
-					'absolute left-0 top-0',
-					isClient ? 'opacity-100' : 'opacity-0',
-				)}
-			>
-				{isClient ? displayedText : text}
-			</span>
+
+			<span className="absolute left-0 top-0">{displayedText}</span>
 		</span>
 	);
 };

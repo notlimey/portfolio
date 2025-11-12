@@ -1,22 +1,12 @@
-import { headers } from 'next/headers';
-import { userAgent } from 'next/server';
+import dynamic from 'next/dynamic';
 import { useLatestPosts } from '~/blog/hooks/use-posts';
-import { About } from '~/home/components/about/about';
-import { TechStackArsenal } from '~/home/components/arsenal/arsenal';
-import { LatestBlogPosts } from '~/home/components/blog/latest';
-import { Hero } from '~/home/components/hero/hero';
-import { ProjectsSection } from '~/home/components/projects/projects-section';
-import { useHomepage } from '~/home/hooks/use-homepage';
 import { useSettings } from '~/shared/hooks/use-settings';
 import { useVentures } from '~/shared/hooks/use-ventures';
 import { useWork } from '~/shared/hooks/use-work';
+import { ProjectsSection } from './components/projects/projects-section';
+import { useHomepage } from './hooks/use-homepage';
 
-export const dynamic = 'force-static';
-
-export default async function Home() {
-	const headersRequest = await headers();
-	const { isBot } = await userAgent({ headers: headersRequest });
-
+export const HomePageContent = async ({ isBot }: { isBot: boolean }) => {
 	const homePage = await useHomepage();
 	const settings = await useSettings();
 	const ventures = await useVentures();
@@ -24,6 +14,38 @@ export default async function Home() {
 	const latestPosts = await useLatestPosts({
 		ignoreId: homePage.featuredPost?._id,
 	});
+
+	const Hero = dynamic(
+		() => import('./components/hero/hero').then((m) => m.Hero),
+		{
+			ssr: true,
+		},
+	);
+
+	const About = dynamic(
+		() => import('./components/about/about').then((m) => m.About),
+		{
+			ssr: true,
+		},
+	);
+
+	const TechStackArsenal = dynamic(
+		() =>
+			import('~/home/components/arsenal/arsenal').then(
+				(m) => m.TechStackArsenal,
+			),
+		{ ssr: true },
+	);
+
+	const LatestBlogPosts = dynamic(
+		() =>
+			import('~/home/components/blog/latest').then(
+				(m) => m.LatestBlogPosts,
+			),
+		{
+			ssr: true,
+		},
+	);
 
 	return (
 		<>
@@ -45,4 +67,4 @@ export default async function Home() {
 			<ProjectsSection />
 		</>
 	);
-}
+};

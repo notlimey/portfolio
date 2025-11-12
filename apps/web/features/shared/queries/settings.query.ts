@@ -8,6 +8,7 @@ export const SETTINGS_QUERY = groq`*[_type == "setting"][0]{
     ventures[]->${VENTURE_QUERY_RAW},
     socials {
         github,
-        linkedin
+        linkedin,
+        email
     }
 }`;

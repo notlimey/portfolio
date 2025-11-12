@@ -42,6 +42,21 @@ export const ventureSchema = defineType({
 			of: [{ type: 'string' }],
 		}),
 		defineField({
+			name: 'color',
+			type: 'string',
+			options: {
+				list: [
+					{ title: 'Purple', value: 'purple' },
+					{ title: 'Pink', value: 'pink' },
+					{ title: 'Blue', value: 'blue' },
+					{ title: 'Orange', value: 'orange' },
+					{ title: 'Yellow', value: 'yellow' },
+					{ title: 'Green', value: 'green' },
+					{ title: 'Red', value: 'red' },
+				],
+			},
+		}),
+		defineField({
 			name: 'stack',
 			title: 'Stack',
 			type: 'array',

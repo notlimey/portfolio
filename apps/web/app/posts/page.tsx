@@ -10,10 +10,24 @@ import { BASE_URL } from '../../configuration';
 import { client } from '../../sanity/lib/client';
 
 export const metadata: Metadata = {
-	title: 'Posts',
-	description: 'Posts',
+	title: 'Blog Posts',
+	description:
+		'Thoughts on code, architecture, and building stuff. Explore articles about Next.js, TypeScript, .NET, Azure, and software development best practices.',
 	alternates: {
 		canonical: `${BASE_URL}/posts`,
+	},
+	openGraph: {
+		title: 'Blog Posts | Martin Kulvedrøsten Myhre',
+		description:
+			'Thoughts on code, architecture, and building stuff. Explore articles about Next.js, TypeScript, .NET, Azure, and software development best practices.',
+		url: `${BASE_URL}/posts`,
+		type: 'website',
+	},
+	twitter: {
+		card: 'summary_large_image',
+		title: 'Blog Posts | Martin Kulvedrøsten Myhre',
+		description:
+			'Thoughts on code, architecture, and building stuff. Explore articles about Next.js, TypeScript, .NET, Azure, and software development best practices.',
 	},
 };
 

@@ -1,13 +1,17 @@
 import type { Post } from '@common/types/post.types';
 import { toPlainText } from '@portabletext/react';
 import { urlFor } from '../../sanity/lib/image';
-
-const BASE_URL =
-	process.env.NEXT_PUBLIC_BASE_URL || 'https://www.yourdomain.com';
-const _ORGANIZATION_NAME = 'Limeyfy AS'; // Leveraging entrepreneurial context
+import { BASE_URL } from '../../configuration';
 
 const sanitizeJsonLd = (json: object): string => {
 	return JSON.stringify(json).replace(/</g, '\\u003c');
+};
+
+const calculateWordCount = (text: string): number => {
+	return text
+		.trim()
+		.split(/\s+/)
+		.filter((word) => word.length > 0).length;
 };
 
 export function generatePostJsonLd(post: Post) {
@@ -18,8 +22,11 @@ export function generatePostJsonLd(post: Post) {
 		? urlFor(post.mainImage).width(1200).url()
 		: '';
 	const description = `${toPlainText(post.body ?? []).slice(0, 150)}...`;
+	const articleBody = toPlainText(post.body ?? []);
+	const wordCount = calculateWordCount(articleBody);
+	const keywords = post.tags?.map((tag) => tag.name) || [];
 
-	const jsonLd = {
+	const jsonLd: Record<string, unknown> = {
 		'@context': 'https://schema.org',
 		'@type': 'Article',
 		mainEntityOfPage: {
@@ -27,19 +34,49 @@ export function generatePostJsonLd(post: Post) {
 			'@id': absoluteUrl,
 		},
 		headline: post.title,
-		image: imageUrl,
 		datePublished: post.publishedAt || post._createdAt,
 		dateModified: post._updatedAt || post._createdAt,
 		author: {
 			'@type': 'Person',
 			name: post.author?.name || 'Martin Kulvedrøsten Myhre',
+			...(post.author?.image && {
+				image: urlFor(post.author.image).url(),
+			}),
 		},
 		publisher: {
-			'@type': 'Person',
-			name: post.author?.name || 'Martin Kulvedrøsten Myhre',
+			'@type': 'Organization',
+			name: 'Martin Kulvedrøsten Myhre',
+			url: BASE_URL,
 		},
 		description: description,
+		inLanguage: 'en-US',
 	};
+
+	// Add optional fields only if they have values
+	if (imageUrl) {
+		jsonLd.image = {
+			'@type': 'ImageObject',
+			url: imageUrl,
+			width: 1200,
+			height: 630,
+		};
+	}
+
+	if (articleBody) {
+		jsonLd.articleBody = articleBody;
+	}
+
+	if (post.category?.title) {
+		jsonLd.articleSection = post.category.title;
+	}
+
+	if (keywords.length > 0) {
+		jsonLd.keywords = keywords.join(', ');
+	}
+
+	if (wordCount > 0) {
+		jsonLd.wordCount = wordCount;
+	}
 
 	return sanitizeJsonLd(jsonLd);
 }

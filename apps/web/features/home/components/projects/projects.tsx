@@ -24,7 +24,8 @@ export function Projects({ currentWork, ventures }: Settings) {
 	}, [currentWork, ventures]);
 
 	return (
-		<section className="py-20 bg-slate-950">
+		// biome-ignore lint/correctness/useUniqueElementIds: This is a unique section on the page
+		<section className="py-20 bg-slate-950" id="projects">
 			<div className="container mx-auto px-4">
 				<div className="max-w-6xl mx-auto">
 					<div className="flex items-center gap-3 mb-4 justify-center">
@@ -62,12 +63,20 @@ export function Projects({ currentWork, ventures }: Settings) {
 															project.logo
 																? urlFor(
 																		project.logo,
-																	).url()
+																	)
+																		.width(
+																			48,
+																		)
+																		.height(
+																			48,
+																		)
+																		.url()
 																: '/images/logo.svg'
 														}
 														alt={`${name} logo`}
 														width={48}
 														height={48}
+														loading="lazy"
 													/>
 												</div>
 												<div>

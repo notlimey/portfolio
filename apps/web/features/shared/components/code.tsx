@@ -1,5 +1,5 @@
 import { cn } from '@common/lib/utils';
-import { PlayIcon } from 'lucide-react';
+import { Loader2Icon, PlayIcon } from 'lucide-react';
 import { useMemo } from 'react';
 
 export const CodeLineVariable = ({
@@ -29,6 +29,7 @@ export const CodeLineFunction = ({
 	lineNumber,
 	lineCount,
 	onRun,
+	isRunning,
 }: {
 	children: React.ReactNode;
 	name: string;
@@ -37,6 +38,7 @@ export const CodeLineFunction = ({
 	lineNumber?: number;
 	lineCount?: number;
 	onRun?: () => void;
+	isRunning?: boolean;
 }) => (
 	<>
 		{onRun ? (
@@ -45,8 +47,13 @@ export const CodeLineFunction = ({
 					type="button"
 					onClick={onRun}
 					className="flex items-center gap-2 cursor-pointer transition-colors text-white hover:text-green-400"
+					disabled={isRunning}
 				>
-					<PlayIcon className="w-4 h-4 text-green-400" />
+					{isRunning ? (
+						<Loader2Icon className="w-4 h-4 text-green-400 animate-spin" />
+					) : (
+						<PlayIcon className="w-4 h-4 text-green-400" />
+					)}
 					<span>Run function</span>
 				</button>
 				<span className="text-slate-500">{`// Run the function to send an email`}</span>
@@ -73,13 +80,28 @@ export const CodeLineWithInput = ({
 	number,
 	name,
 	placeholder,
+	value,
+	onChange,
+	onBlur,
+	...props
 }: {
 	number?: number;
 	name: string;
 	placeholder: string;
-}) => (
+	value?: string;
+	onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+	onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
+} & React.InputHTMLAttributes<HTMLInputElement>) => (
 	<CodeLineVariable name={name} number={number}>
-		<input type="text" className="inline-input" placeholder={placeholder} />
+		<input
+			type="text"
+			className="inline-input"
+			placeholder={placeholder}
+			value={value}
+			onChange={onChange}
+			onBlur={onBlur}
+			{...props}
+		/>
 	</CodeLineVariable>
 );
 
@@ -88,12 +110,19 @@ export const CodeLineWithTextarea = ({
 	end,
 	name,
 	placeholder,
+	value,
+	onChange,
+	onBlur,
+	...props
 }: {
 	name: string;
 	placeholder: string;
 	start: number;
 	end: number;
-}) => (
+	value?: string;
+	onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+	onBlur?: (e: React.FocusEvent<HTMLTextAreaElement>) => void;
+} & React.TextareaHTMLAttributes<HTMLTextAreaElement>) => (
 	<>
 		<CodeLineVariable name={name} number={start}>
 			<span className="text-yellow-400">`</span>
@@ -106,9 +135,13 @@ export const CodeLineWithTextarea = ({
 			<textarea
 				className="inline-input h-full w-full max-w-[600px]"
 				placeholder={placeholder}
+				value={value}
+				onChange={onChange}
+				onBlur={onBlur}
 				style={{
 					resize: 'none',
 				}}
+				{...props}
 			/>
 		</CodeLines>
 		<CodeLine number={end}>

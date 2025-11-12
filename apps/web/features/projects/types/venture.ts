@@ -16,6 +16,7 @@ export type Venture = {
 	github?: string;
 	linkedin?: string;
 	metrics?: { name: string; value: string }[];
+	color?: 'purple' | 'pink' | 'blue' | 'orange' | 'yellow' | 'green' | 'red';
 };
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>

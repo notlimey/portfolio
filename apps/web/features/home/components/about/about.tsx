@@ -4,17 +4,33 @@ import { Badge } from '@common/components/ui/badge';
 import { Card } from '@common/components/ui/card';
 import type { Homepage } from '@common/types/homepage.types';
 import { toPlainText } from 'next-sanity';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import NextDynamic from 'next/dynamic';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import type { Venture } from '~/projects/types/venture';
 import type { Work } from '~/projects/types/work';
 import type { Settings } from '~/shared/types';
+import { useEffect, useState } from 'react';
+import { cn } from '@common/lib/utils';
+
+const SyntaxHighlighter = NextDynamic(
+	() => import('react-syntax-highlighter').then((m) => m.Prism),
+	{ ssr: false },
+) as unknown as React.FC<{
+	language: string;
+	style: Record<string, React.CSSProperties>;
+	children?: React.ReactNode;
+	showLineNumbers?: boolean;
+	customStyle?: React.CSSProperties;
+	lineNumberStyle?:
+		| React.CSSProperties
+		| ((n: number) => React.CSSProperties);
+}>;
 
 const escapeSnippetValue = (value?: string) =>
 	(value ?? '').replace(/"/g, '\\"');
 
 const formatArrayForSnippet = (items?: string[]) =>
-	items && items.length
+	items?.length
 		? items.map((item) => `"${escapeSnippetValue(item)}"`).join(', ')
 		: '';
 
@@ -145,6 +161,16 @@ ${venturesForSnippet}
 			: null,
 	].filter(Boolean) as { icon: string; text: string }[];
 
+	const colors = {
+		purple: 'bg-purple-500/10 text-purple-300 border-purple-500/20',
+		pink: 'bg-pink-500/10 text-pink-300 border-pink-500/20',
+		blue: 'bg-blue-500/10 text-blue-300 border-blue-500/20',
+		orange: 'bg-orange-500/10 text-orange-300 border-orange-500/20',
+		yellow: 'bg-yellow-500/10 text-yellow-300 border-yellow-500/20',
+		green: 'bg-green-500/10 text-green-300 border-green-500/20',
+		red: 'bg-red-500/10 text-red-300 border-red-500/20',
+	};
+
 	return (
 		<section className="py-20 bg-slate-900">
 			<div className="container mx-auto px-4">
@@ -163,25 +189,7 @@ ${venturesForSnippet}
 								</div>
 							</div>
 							<div className="overflow-x-auto">
-								<SyntaxHighlighter
-									language="typescript"
-									style={vscDarkPlus}
-									showLineNumbers={true}
-									customStyle={{
-										margin: 0,
-										padding: '1rem',
-										background: 'transparent',
-										fontSize: '0.875rem',
-									}}
-									lineNumberStyle={{
-										minWidth: '2.5em',
-										paddingRight: '1em',
-										color: '#475569',
-										userSelect: 'none',
-									}}
-								>
-									{codeSnippet}
-								</SyntaxHighlighter>
+								<CodeSnippetSSR code={codeSnippet} />
 							</div>
 						</div>
 
@@ -271,7 +279,14 @@ ${venturesForSnippet}
 													}
 												>
 													<div className="flex items-center gap-2 mb-1">
-														<Badge className="bg-purple-500/10 text-purple-300 border-purple-500/20">
+														<Badge
+															className={cn(
+																colors[
+																	venture.color ??
+																		'purple'
+																],
+															)}
+														>
 															{venture.name}
 														</Badge>
 														{meta ? (
@@ -280,7 +295,7 @@ ${venturesForSnippet}
 															</span>
 														) : null}
 													</div>
-													<div className="text-slate-400">
+													<div className="richtext text-slate-400 article-content">
 														{venture.description ? (
 															<PortableText
 																value={
@@ -310,13 +325,13 @@ ${venturesForSnippet}
 											Quick Facts
 										</h3>
 										{quickFacts.length > 0 ? (
-											<ul className="space-y-2 text-slate-300">
+											<ul className="space-y-2 text-slate-300 -ml-[14px]">
 												{quickFacts.map((fact) => (
 													<li
 														key={fact.text}
 														className="flex items-center gap-2"
 													>
-														<span>{fact.icon}</span>
+														<span>-</span>
 														<span>{fact.text}</span>
 													</li>
 												))}
@@ -337,3 +352,38 @@ ${venturesForSnippet}
 		</section>
 	);
 }
+
+const CodeSnippetSSR = ({ code }: { code: string }) => {
+	const [isClient, setIsClient] = useState(false);
+	useEffect(() => setIsClient(true), []);
+
+	if (!isClient) {
+		return (
+			<pre className="m-0 p-4 bg-transparent text-slate-200 text-sm overflow-x-auto">
+				<code>{code}</code>
+			</pre>
+		);
+	}
+
+	return (
+		<SyntaxHighlighter
+			language="typescript"
+			style={vscDarkPlus}
+			showLineNumbers={true}
+			customStyle={{
+				margin: 0,
+				padding: '1rem',
+				background: 'transparent',
+				fontSize: '0.875rem',
+			}}
+			lineNumberStyle={{
+				minWidth: '2.5em',
+				paddingRight: '1em',
+				color: '#475569',
+				userSelect: 'none',
+			}}
+		>
+			{code}
+		</SyntaxHighlighter>
+	);
+};

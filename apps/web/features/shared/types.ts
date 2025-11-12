@@ -4,6 +4,7 @@ import type { Work } from '../projects/types/work';
 export type SettingsSocials = {
 	github?: string;
 	linkedin?: string;
+	email?: string;
 };
 
 export type Settings = {
