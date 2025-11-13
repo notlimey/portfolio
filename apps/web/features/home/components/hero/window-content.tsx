@@ -2,7 +2,7 @@
 import { Button } from '@common/components/ui/button';
 import type { Homepage } from '@common/types/homepage.types';
 import { animated } from '@react-spring/web';
-import { Code2, Github } from 'lucide-react';
+import { BookOpenIcon, Code2, Github } from 'lucide-react';
 import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Settings } from '~/shared/types';
@@ -140,7 +140,7 @@ export const HeroWindowContent = ({
 						href={settings.socials?.github ?? ''}
 						className="gap-2 cursor-pointer"
 					>
-						<Github className="w-4 h-4" />
+						<Github className="size-4" />
 						GitHub
 					</Link>
 				</Button>
@@ -149,8 +149,18 @@ export const HeroWindowContent = ({
 					className="gap-2 border-slate-700 hover:bg-slate-800"
 					asChild
 				>
+					<Link href="/posts">
+						<BookOpenIcon className="size-4" />
+						View Posts
+					</Link>
+				</Button>
+				<Button
+					variant="outline"
+					className="gap-2 border-slate-700 hover:bg-slate-800"
+					asChild
+				>
 					<Link href="#projects">
-						<Code2 className="w-4 h-4" />
+						<Code2 className="size-4" />
 						View Projects
 					</Link>
 				</Button>
